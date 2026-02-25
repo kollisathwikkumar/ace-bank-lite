@@ -1,0 +1,551 @@
+<script>
+/* ═══════════════════════════════════════════════════
+   SAL — State / Action / Logic
+   Central state machine for the ACE Bank dashboard
+══════════════════════════════════════════════════ */
+
+// ──────────── STATE ────────────
+const SAL = {
+  state: {
+    balance: 124530,
+    currentPage: 'dashboard',
+    notifOpen: false,
+    unreadNotifs: 3,
+    cardFrozen: false,
+    notifications: [
+      { id: 1, text: 'Salary of ₹1,12,000 credited to your account', time: '2 hours ago', unread: true },
+      { id: 2, text: 'Credit card bill of ₹4,240 is due in 3 days', time: '5 hours ago', unread: true },
+      { id: 3, text: 'New offer: Zero fee on international transfers', time: 'Yesterday', unread: true },
+      { id: 4, text: 'Your credit score improved by 12 points', time: '2 days ago', unread: false },
+      { id: 5, text: 'Statement generated for October 2023', time: '3 days ago', unread: false },
+    ],
+    transactions: [
+      { icon: 'shopping_bag', name: 'Apple Store', cat: 'Electronics', date: 'Oct 24, 2023', amount: -89900, type: 'debit' },
+      { icon: 'payments', name: 'Salary Deposit', cat: 'Payroll', date: 'Oct 22, 2023', amount: 112000, type: 'credit' },
+      { icon: 'restaurant', name: 'The Table Restaurant', cat: 'Food & Dining', date: 'Oct 20, 2023', amount: -4240, type: 'debit' },
+      { icon: 'subscriptions', name: 'Netflix Subscription', cat: 'Entertainment', date: 'Oct 18, 2023', amount: -649, type: 'debit' },
+      { icon: 'local_gas_station', name: 'HP Petrol Pump', cat: 'Transport', date: 'Oct 16, 2023', amount: -2500, type: 'debit' },
+      { icon: 'shopping_cart', name: 'Amazon Order', cat: 'Shopping', date: 'Oct 14, 2023', amount: -3199, type: 'debit' },
+      { icon: 'medical_services', name: 'Apollo Pharmacy', cat: 'Health', date: 'Oct 12, 2023', amount: -890, type: 'debit' },
+      { icon: 'send', name: 'Transfer to Rahul', cat: 'Transfer', date: 'Oct 10, 2023', amount: -5000, type: 'debit' },
+    ],
+    settings: { txalert: true, reminders: true, marketing: false, '2fa': true, biometric: false }
+  },
+
+  // ──────────── ACTIONS ────────────
+  actions: {
+    navigateTo(page) {
+      SAL.state.currentPage = page;
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(`page-${page}`)?.classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => {
+        n.classList.toggle('active', n.dataset.page === page);
+      });
+    },
+
+    openModal(id) {
+      document.getElementById(id)?.classList.add('open');
+    },
+
+    closeModal(id) {
+      document.getElementById(id)?.classList.remove('open');
+    },
+
+    toggleNotifPanel() {
+      SAL.state.notifOpen = !SAL.state.notifOpen;
+      document.getElementById('notifPanel').classList.toggle('open', SAL.state.notifOpen);
+    },
+
+    markAllRead() {
+      SAL.state.notifications.forEach(n => n.unread = false);
+      SAL.state.unreadNotifs = 0;
+      SAL.logic.renderNotifications();
+      document.getElementById('notifDot').style.display = 'none';
+      SAL.logic.toast('All notifications marked as read', 'info');
+    },
+
+    transfer(recipient, amount, note) {
+      if (!recipient || !amount || amount <= 0) {
+        SAL.logic.toast('Please fill all required fields', 'error'); return;
+      }
+      if (amount > SAL.state.balance) {
+        SAL.logic.toast('Insufficient balance', 'error'); return;
+      }
+      SAL.state.balance -= parseFloat(amount);
+      SAL.state.transactions.unshift({
+        icon: 'send',
+        name: `Transfer to ${recipient}`,
+        cat: 'Transfer',
+        date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+        amount: -parseFloat(amount),
+        type: 'debit'
+      });
+      SAL.logic.updateBalance();
+      SAL.logic.renderTransactions();
+      SAL.actions.closeModal('transferModal');
+      SAL.logic.toast(`₹${parseFloat(amount).toLocaleString('en-IN')} sent to ${recipient}`, 'success');
+    },
+
+    addFunds(amount, method) {
+      if (!amount || amount <= 0) {
+        SAL.logic.toast('Enter a valid amount', 'error'); return;
+      }
+      SAL.state.balance += parseFloat(amount);
+      SAL.state.transactions.unshift({
+        icon: 'add_card',
+        name: `Funds added via ${method}`,
+        cat: 'Credit',
+        date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+        amount: parseFloat(amount),
+        type: 'credit'
+      });
+      SAL.logic.updateBalance();
+      SAL.logic.renderTransactions();
+      SAL.actions.closeModal('addFundsModal');
+      SAL.logic.toast(`₹${parseFloat(amount).toLocaleString('en-IN')} added to your account`, 'success');
+    },
+
+    newPayment(payee, amount, type) {
+      if (!payee || !amount || amount <= 0) {
+        SAL.logic.toast('Please fill all required fields', 'error'); return;
+      }
+      SAL.state.balance -= parseFloat(amount);
+      SAL.state.transactions.unshift({
+        icon: 'payments',
+        name: `${type}: ${payee}`,
+        cat: type,
+        date: new Date().toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }),
+        amount: -parseFloat(amount),
+        type: 'debit'
+      });
+      SAL.logic.updateBalance();
+      SAL.logic.renderTransactions();
+      SAL.actions.closeModal('newPaymentModal');
+      SAL.logic.toast(`Payment of ₹${parseFloat(amount).toLocaleString('en-IN')} to ${payee} successful`, 'success');
+    },
+
+    toggleCard() {
+      SAL.state.cardFrozen = !SAL.state.cardFrozen;
+      const btn = document.getElementById('freezeCardBtn');
+      const card = document.getElementById('visaCard');
+      if (SAL.state.cardFrozen) {
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px">whatshot</span> Unfreeze Card';
+        card.style.filter = 'grayscale(0.8) brightness(0.7)';
+        SAL.logic.toast('Card frozen successfully. It cannot be used for transactions.', 'warn');
+      } else {
+        btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px">ac_unit</span> Freeze Card';
+        card.style.filter = '';
+        SAL.logic.toast('Card unfrozen. Your card is now active.', 'success');
+      }
+    },
+
+    toggleSetting(key) {
+      SAL.state.settings[key] = !SAL.state.settings[key];
+    },
+
+    logout() {
+      SAL.logic.toast('Signing out... See you soon, Alex!', 'info');
+      setTimeout(() => {
+        document.querySelector('.layout').style.opacity = '0';
+        document.querySelector('.layout').style.transition = 'opacity 0.5s';
+        setTimeout(() => { document.querySelector('.layout').style.opacity = '1'; document.querySelector('.layout').style.transition = ''; }, 1500);
+      }, 600);
+    }
+  },
+
+  // ──────────── LOGIC ────────────
+  logic: {
+    toast(message, type = 'success') {
+      const icons = { success: 'check_circle', error: 'error', info: 'info', warn: 'warning' };
+      const el = document.createElement('div');
+      el.className = `toast ${type === 'success' ? '' : type}`;
+      el.innerHTML = `
+        <div class="toast-icon"><span class="material-symbols-outlined">${icons[type]}</span></div>
+        <span class="toast-text">${message}</span>
+      `;
+      document.getElementById('toastContainer').appendChild(el);
+      requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
+      setTimeout(() => {
+        el.classList.remove('show');
+        setTimeout(() => el.remove(), 400);
+      }, 3500);
+    },
+
+    updateBalance() {
+      const el = document.getElementById('heroBalance');
+      if (!el) return;
+      const formatted = '₹' + SAL.state.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      el.textContent = formatted;
+      el.style.transform = 'scale(1.02)';
+      setTimeout(() => { el.style.transform = ''; el.style.transition = 'transform 0.3s'; }, 200);
+    },
+
+    renderTransactions() {
+      const recent = SAL.state.transactions.slice(0, 5);
+      const all = SAL.state.transactions;
+
+      const buildItem = (tx) => `
+        <div class="tx-item ripple-container">
+          <div class="tx-icon"><span class="material-symbols-outlined">${tx.icon}</span></div>
+          <div class="tx-info">
+            <div class="tx-name">${tx.name}</div>
+            <div class="tx-meta">${tx.cat} · ${tx.date}</div>
+          </div>
+          <div class="tx-amount ${tx.type}">
+            ${tx.type === 'credit' ? '+' : '-'} ₹${Math.abs(tx.amount).toLocaleString('en-IN')}
+          </div>
+        </div>
+      `;
+
+      const txList = document.getElementById('txList');
+      if (txList) txList.innerHTML = recent.map(buildItem).join('');
+
+      const allTxList = document.getElementById('allTxList');
+      if (allTxList) allTxList.innerHTML = all.map(buildItem).join('');
+    },
+
+    renderNotifications() {
+      const list = document.getElementById('notifList');
+      if (!list) return;
+      list.innerHTML = SAL.state.notifications.map(n => `
+        <div class="notif-item ${n.unread ? 'unread' : ''}" data-id="${n.id}">
+          ${n.unread ? '<div class="notif-dot-indicator"></div>' : '<div style="width:8px;flex-shrink:0"></div>'}
+          <div>
+            <div class="notif-content-text">${n.text}</div>
+            <div class="notif-time">${n.time}</div>
+          </div>
+        </div>
+      `).join('');
+
+      // Clicking a notif marks it read
+      list.querySelectorAll('.notif-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const id = parseInt(item.dataset.id);
+          const notif = SAL.state.notifications.find(n => n.id === id);
+          if (notif && notif.unread) {
+            notif.unread = false;
+            SAL.state.unreadNotifs = Math.max(0, SAL.state.unreadNotifs - 1);
+            if (SAL.state.unreadNotifs === 0) document.getElementById('notifDot').style.display = 'none';
+            SAL.logic.renderNotifications();
+          }
+        });
+      });
+    },
+
+    renderBarChart() {
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const values = [12000,15000,9800,22000,18500,21000,16200,19800,24000,18240,0,0];
+      const max = Math.max(...values.filter(v => v > 0));
+
+      const chart = document.getElementById('barChart');
+      if (!chart) return;
+      chart.innerHTML = values.map((v, i) => `
+        <div class="bar-col">
+          <div class="bar ${v === Math.max(...values.filter(v=>v>0)) ? 'active-bar' : ''}" 
+               style="height:${v > 0 ? (v/max)*100 : 8}px;${v === 0 ? 'opacity:0.06' : ''}"
+               title="₹${v.toLocaleString('en-IN')} in ${months[i]}">
+          </div>
+          <div class="bar-label">${months[i].slice(0,3)}</div>
+        </div>
+      `).join('');
+
+      chart.querySelectorAll('.bar').forEach(bar => {
+        bar.addEventListener('click', () => {
+          chart.querySelectorAll('.bar').forEach(b => b.classList.remove('active-bar'));
+          bar.classList.add('active-bar');
+          SAL.logic.toast(`Selected: ${bar.title}`, 'info');
+        });
+      });
+    },
+
+    renderCategoryCards() {
+      const cats = [
+        { icon: 'devices', label: 'Technology', pct: 60, color: 'var(--primary)', bg: 'rgba(0,102,255,0.08)' },
+        { icon: 'restaurant', label: 'Food', pct: 25, color: 'var(--emerald)', bg: '#ecfdf5' },
+        { icon: 'subscriptions', label: 'Lifestyle', pct: 15, color: '#a855f7', bg: '#fdf2f8' },
+        { icon: 'directions_car', label: 'Transport', pct: 8, color: 'var(--amber)', bg: '#fff7ed' },
+      ];
+      const el = document.getElementById('categoryCards');
+      if (!el) return;
+      el.innerHTML = cats.map(c => `
+        <div class="stat-card" style="cursor:default">
+          <div class="stat-icon" style="background:${c.bg};margin-bottom:0.75rem">
+            <span class="material-symbols-outlined" style="color:${c.color}">${c.icon}</span>
+          </div>
+          <div class="stat-label">${c.label}</div>
+          <div class="stat-value outfit" style="font-size:1.1rem;color:${c.color}">${c.pct}%</div>
+          <div style="margin-top:0.5rem;height:4px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${c.pct}%;background:${c.color};border-radius:99px"></div>
+          </div>
+        </div>
+      `).join('');
+    },
+
+    addRipple(el, e) {
+      const rect = el.getBoundingClientRect();
+      const ripple = document.createElement('div');
+      const size = Math.max(rect.width, rect.height);
+      ripple.className = 'ripple-effect';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+      el.appendChild(ripple);
+      ripple.addEventListener('animationend', () => ripple.remove());
+    },
+
+    init() {
+      // Render initial data
+      this.renderTransactions();
+      this.renderNotifications();
+      this.renderBarChart();
+      this.renderCategoryCards();
+
+      // ── Navigation ──
+      document.querySelectorAll('[data-page]').forEach(item => {
+        item.addEventListener('click', () => SAL.actions.navigateTo(item.dataset.page));
+      });
+
+      // ── Ripple effects ──
+      document.querySelectorAll('.ripple-container').forEach(el => {
+        el.addEventListener('click', (e) => SAL.logic.addRipple(el, e));
+      });
+
+      // ── Close modals ──
+      document.querySelectorAll('.modal-close, [data-modal]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.modal;
+          if (id) SAL.actions.closeModal(id);
+        });
+      });
+
+      document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) SAL.actions.closeModal(overlay.id);
+        });
+      });
+
+      // ── Header buttons ──
+      document.getElementById('notifBtn').addEventListener('click', () => SAL.actions.toggleNotifPanel());
+      document.getElementById('markAllBtn').addEventListener('click', () => SAL.actions.markAllRead());
+      document.getElementById('newPaymentBtn').addEventListener('click', () => SAL.actions.openModal('newPaymentModal'));
+      document.getElementById('logoutBtn').addEventListener('click', () => SAL.actions.logout());
+
+      // ── Theme toggle ──
+      let dark = false;
+      document.getElementById('themeBtn').addEventListener('click', () => {
+        dark = !dark;
+        if (dark) {
+          document.documentElement.style.setProperty('--bg-main', '#0f172a');
+          document.documentElement.style.setProperty('--surface', '#1e293b');
+          document.documentElement.style.setProperty('--border', 'rgba(255,255,255,0.06)');
+          document.documentElement.style.setProperty('--text-1', '#f1f5f9');
+          document.documentElement.style.setProperty('--text-2', '#94a3b8');
+          document.documentElement.style.setProperty('--bg-dark', '#020617');
+          document.getElementById('themeBtn').querySelector('.material-symbols-outlined').textContent = 'light_mode';
+          document.querySelectorAll('.card,.stat-card,.quick-btn,.support-card,.balance-hero,.icon-btn').forEach(el => el.style.background = '#1e293b');
+          SAL.logic.toast('Dark mode enabled', 'info');
+        } else {
+          document.documentElement.style.setProperty('--bg-main', '#f0f2f7');
+          document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.07)');
+          document.documentElement.style.setProperty('--text-1', '#0f172a');
+          document.documentElement.style.setProperty('--text-2', '#64748b');
+          document.documentElement.style.setProperty('--bg-dark', '#08080f');
+          document.getElementById('themeBtn').querySelector('.material-symbols-outlined').textContent = 'dark_mode';
+          document.querySelectorAll('.card,.stat-card,.quick-btn,.support-card,.balance-hero,.icon-btn').forEach(el => el.style.background = '');
+          SAL.logic.toast('Light mode enabled', 'info');
+        }
+      });
+
+      // ── Search ──
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        const q = e.target.value.toLowerCase();
+        if (!q) return;
+        const matches = SAL.state.transactions.filter(t =>
+          t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q)
+        );
+        if (matches.length > 0) {
+          SAL.logic.toast(`${matches.length} result(s) found for "${q}"`, 'info');
+        }
+      });
+
+      // ── Dashboard: Transfer ──
+      document.getElementById('transferBtn').addEventListener('click', () => SAL.actions.openModal('transferModal'));
+      document.getElementById('addFundsBtn').addEventListener('click', () => SAL.actions.openModal('addFundsModal'));
+
+      document.getElementById('confirmTransferBtn').addEventListener('click', () => {
+        SAL.actions.transfer(
+          document.getElementById('tfRecipient').value,
+          document.getElementById('tfAmount').value,
+          document.getElementById('tfNote').value
+        );
+        document.getElementById('tfRecipient').value = '';
+        document.getElementById('tfAmount').value = '';
+        document.getElementById('tfNote').value = '';
+      });
+
+      document.getElementById('confirmAddFundsBtn').addEventListener('click', () => {
+        SAL.actions.addFunds(
+          document.getElementById('afAmount').value,
+          document.getElementById('afMethod').value
+        );
+        document.getElementById('afAmount').value = '';
+      });
+
+      // ── New Payment ──
+      document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
+        SAL.actions.newPayment(
+          document.getElementById('npPayee').value,
+          document.getElementById('npAmount').value,
+          document.getElementById('npType').value
+        );
+        document.getElementById('npPayee').value = '';
+        document.getElementById('npAmount').value = '';
+      });
+
+      // ── Quick Actions ──
+      document.getElementById('quickSend').addEventListener('click', () => SAL.actions.openModal('transferModal'));
+      document.getElementById('quickReceive').addEventListener('click', () => SAL.actions.openModal('addFundsModal'));
+      document.getElementById('quickPay').addEventListener('click', () => SAL.actions.openModal('scanPayModal'));
+      document.getElementById('quickBill').addEventListener('click', () => SAL.actions.openModal('newPaymentModal'));
+
+      document.getElementById('confirmScanPayBtn').addEventListener('click', () => {
+        const upi = document.getElementById('spUPI').value;
+        const amt = document.getElementById('spAmount').value;
+        if (!upi || !amt) { SAL.logic.toast('Fill all fields', 'error'); return; }
+        SAL.state.balance -= parseFloat(amt);
+        SAL.logic.updateBalance();
+        SAL.actions.closeModal('scanPayModal');
+        SAL.logic.toast(`₹${parseFloat(amt).toLocaleString('en-IN')} paid to ${upi}`, 'success');
+        document.getElementById('spUPI').value = '';
+        document.getElementById('spAmount').value = '';
+      });
+
+      // ── View All Transactions ──
+      document.getElementById('viewAllTxBtn').addEventListener('click', () => SAL.actions.navigateTo('transactions'));
+
+      // ── Stat Cards click ──
+      document.getElementById('incomeCard').addEventListener('click', () => {
+        SAL.actions.navigateTo('analytics');
+        SAL.logic.toast('Viewing income analytics', 'info');
+      });
+      document.getElementById('expenseCard').addEventListener('click', () => {
+        SAL.actions.navigateTo('analytics');
+        SAL.logic.toast('Viewing expense analytics', 'info');
+      });
+      document.getElementById('investCard').addEventListener('click', () => {
+        SAL.actions.navigateTo('accounts');
+        SAL.logic.toast('Viewing investment portfolio', 'info');
+      });
+      document.getElementById('creditCard2').addEventListener('click', () => {
+        SAL.logic.toast('Credit Score: 812 — Excellent! Keep it up.', 'success');
+      });
+
+      // ── Accounts ──
+      document.getElementById('addAccountBtn').addEventListener('click', () => SAL.actions.openModal('addAccountModal'));
+
+      document.getElementById('confirmAddAccountBtn').addEventListener('click', () => {
+        const bank = document.getElementById('aaBank').value;
+        if (!bank) { SAL.logic.toast('Enter bank name', 'error'); return; }
+        SAL.actions.closeModal('addAccountModal');
+        SAL.logic.toast(`${bank} account linked successfully!`, 'success');
+        document.getElementById('aaBank').value = '';
+        document.getElementById('aaAccNum').value = '';
+        document.getElementById('aaIFSC').value = '';
+      });
+
+      ['acc1','acc2','acc3'].forEach(id => {
+        document.getElementById(id)?.addEventListener('click', () => {
+          SAL.logic.toast('Account details — full statement view coming soon', 'info');
+        });
+      });
+
+      // ── Transactions page buttons ──
+      document.getElementById('filterBtn').addEventListener('click', () => {
+        SAL.logic.toast('Filter panel — coming in next update', 'info');
+      });
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        SAL.logic.toast('Exporting transactions as CSV...', 'info');
+        setTimeout(() => SAL.logic.toast('Transactions exported successfully!', 'success'), 1500);
+      });
+
+      // ── Analytics select ──
+      document.getElementById('analyticsYearSel').addEventListener('change', () => {
+        SAL.logic.renderBarChart();
+        SAL.logic.toast('Chart updated', 'info');
+      });
+
+      // ── Cards ──
+      document.getElementById('applyCardBtn').addEventListener('click', () => SAL.actions.openModal('applyCardModal'));
+      document.getElementById('freezeCardBtn').addEventListener('click', () => SAL.actions.toggleCard());
+      document.getElementById('cardDetailsBtn').addEventListener('click', () => {
+        SAL.logic.toast('Card number: 4242 •••• •••• 4242 · CVV sent to registered email', 'info');
+      });
+      document.getElementById('visaCard').addEventListener('click', () => {
+        SAL.logic.toast('ACE Platinum Card — Tap for contactless payment ready!', 'info');
+      });
+      document.getElementById('confirmApplyCardBtn').addEventListener('click', () => {
+        SAL.actions.closeModal('applyCardModal');
+        SAL.logic.toast('Application submitted! You\'ll hear back in 3-5 business days.', 'success');
+      });
+
+      // ── Settings ──
+      document.querySelectorAll('.toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+          toggle.classList.toggle('on');
+          const key = toggle.dataset.setting;
+          SAL.actions.toggleSetting(key);
+          SAL.logic.toast(`${key} ${SAL.state.settings[key] ? 'enabled' : 'disabled'}`, SAL.state.settings[key] ? 'success' : 'info');
+        });
+      });
+
+      document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+        SAL.logic.toast('Settings saved successfully!', 'success');
+      });
+      document.getElementById('resetSettingsBtn').addEventListener('click', () => {
+        document.querySelectorAll('.toggle').forEach(t => t.classList.remove('on'));
+        ['txalert','reminders','2fa'].forEach(k => document.querySelector(`[data-setting="${k}"]`)?.classList.add('on'));
+        SAL.logic.toast('Settings reset to defaults', 'info');
+      });
+
+      // ── Support ──
+      document.getElementById('chatSupportBtn').addEventListener('click', () => {
+        SAL.logic.toast('Connecting you to a live agent...', 'info');
+        setTimeout(() => SAL.logic.toast('Agent Priya joined the chat!', 'success'), 2000);
+      });
+      document.getElementById('callSupportBtn').addEventListener('click', () => {
+        SAL.logic.toast('Dial 1800-XXX-XXXX — Mon to Fri, 9AM–6PM IST', 'info');
+      });
+      document.getElementById('faqBtn').addEventListener('click', () => {
+        SAL.logic.toast('Opening Knowledge Base...', 'info');
+      });
+      document.getElementById('ticketBtn').addEventListener('click', () => SAL.actions.openModal('ticketModal'));
+      document.getElementById('confirmTicketBtn').addEventListener('click', () => {
+        SAL.actions.closeModal('ticketModal');
+        SAL.logic.toast('Ticket #ACE-2847 submitted. We\'ll respond within 24 hours.', 'success');
+      });
+
+      // ── Spending Legend hover ──
+      document.querySelectorAll('.legend-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const cats = { tech: 'Technology: ₹10,920 (60%)', food: 'Food & Drinks: ₹4,550 (25%)', life: 'Lifestyle: ₹2,730 (15%)' };
+          SAL.logic.toast(cats[item.dataset.cat] || '', 'info');
+        });
+      });
+
+      // ── Escape key closes modals ──
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+          if (SAL.state.notifOpen) SAL.actions.toggleNotifPanel();
+        }
+      });
+
+      // ── Welcome toast ──
+      setTimeout(() => SAL.logic.toast('Welcome back, Alex! 👋 Balance updated.', 'success'), 800);
+    }
+  }
+};
+
+// Boot
+document.addEventListener('DOMContentLoaded', () => SAL.logic.init());
+</script>
+</body>
+</html>

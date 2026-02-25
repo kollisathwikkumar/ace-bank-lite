@@ -5,12 +5,22 @@ user:
     FROM USERS u 
     JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID 
     WHERE a.ACCOUNT_NO = ? AND u.PASSWORD_HASH = ?
-  signup: "INSERT INTO USERS (FIRST_NAME, LAST_NAME, AADHAAR_NO, EMAIL, PASSWORD_HASH) VALUES (?,?,?,?,?)"
+  signup: "INSERT INTO USERS (FIRST_NAME, LAST_NAME, AADHAAR_NO, EMAIL, PHONE, PASSWORD_HASH) VALUES (?,?,?,?,?,?)"
   recover_details: >
     SELECT u.FIRST_NAME, u.LAST_NAME, a.ACCOUNT_NO 
     FROM USERS u 
     JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID 
     WHERE u.EMAIL = ?
+  get_account_by_email: >
+    SELECT a.ACCOUNT_NO 
+    FROM USERS u 
+    JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID 
+    WHERE u.EMAIL = ?
+  get_account_by_phone: >
+    SELECT a.ACCOUNT_NO 
+    FROM USERS u 
+    JOIN ACCOUNTS a ON u.USER_ID = a.USER_ID 
+    WHERE u.PHONE = ?
   get_password_by_acc: >
     SELECT u.PASSWORD_HASH 
     FROM USERS u 

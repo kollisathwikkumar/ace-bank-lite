@@ -40,3 +40,19 @@ build/
 
 /src/resources/application-dev.properties
 
+
+# Tomcat & build artifacts
+apache-tomcat-*/
+*.tar.gz
+work/
+logs/
+conf/
+
+# IDE
+.idea/
+.smarttomcat/
+
+# Dev scripts & backups
+*.bak
+extract.py
+src/main/resources/application-dev.properties

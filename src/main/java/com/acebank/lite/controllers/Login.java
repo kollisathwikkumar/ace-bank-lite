@@ -5,7 +5,6 @@ import java.io.Serial;
 import java.util.List;
 import java.util.Optional;
 
-
 import com.acebank.lite.dao.BankUserDao;
 import com.acebank.lite.dao.BankUserDaoImpl;
 import com.acebank.lite.models.LoginResult;
@@ -33,14 +32,13 @@ public class Login extends HttpServlet {
 
         String accStr = request.getParameter("accountNumber");
         String password = request.getParameter("password");
-//        String rememberMe = request.getParameter("rememberMe");
+        // String rememberMe = request.getParameter("rememberMe");
 
         try {
             int accountNo = Integer.parseInt(accStr);
 
             // 1. Authenticate via Service
             Optional<LoginResult> loginResultOpt = bankService.authenticate(accountNo, password);
-
 
             if (loginResultOpt.isPresent()) {
                 var details = loginResultOpt.get();
@@ -59,27 +57,27 @@ public class Login extends HttpServlet {
 
                 // 4. Handle "Remember Me" Cookie
 
-
                 log.info("User " + accountNo + " logged in successfully.");
 
-//                request.getRequestDispatcher("/WEB-INF/views/Home.jsp").forward(request, response);
+                // request.getRequestDispatcher("/WEB-INF/views/Home.jsp").forward(request,
+                // response);
 
                 // PRG Pattern
                 // REDIRECT: Tells browser "Go to /home using GET"
                 response.sendRedirect(request.getContextPath() + "/home");
             } else {
                 log.warning("Authentication failed for account: " + accStr);
-                response.sendRedirect("LoginFail.jsp");
+                response.sendRedirect("login.jsp?error=true");
             }
         } catch (Exception e) {
             log.severe("Login Error: \n" + e.getMessage());
-            response.sendRedirect("LoginFail.jsp");
+            response.sendRedirect("login.jsp?error=true");
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("Login.jsp");
+        response.sendRedirect("login.jsp");
     }
 }

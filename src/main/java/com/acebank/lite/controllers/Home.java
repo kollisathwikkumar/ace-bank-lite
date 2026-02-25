@@ -1,6 +1,5 @@
 package com.acebank.lite.controllers;
 
-
 import com.acebank.lite.models.*;
 
 import com.acebank.lite.service.BankService;
@@ -40,19 +39,8 @@ public class Home extends HttpServlet {
             return;
         }
 
-        int accountNumber = (int) session.getAttribute("accountNumber");
-
-        try {
-            // Always refresh data before painting the UI
-            updateSessionData(session, accountNumber);
-
-            // Forward to the hidden JSP in WEB-INF
-            request.getRequestDispatcher("/WEB-INF/views/Home.jsp").forward(request, response);
-
-        } catch (Exception e) {
-            log.severe("Error rendering Home Dashboard: " + e.getMessage());
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Dashboard load failed.");
-        }
+        // Redirect to the V2 dashboard
+        response.sendRedirect("dashboard.html");
     }
 
     /**
@@ -87,7 +75,7 @@ public class Home extends HttpServlet {
                 log.info("Deposit Status: " + status);
 
             }
-// --- ACTION 2: WITHDRAW ---
+            // --- ACTION 2: WITHDRAW ---
             else if (withdrawAmount != null && !withdrawAmount.trim().isEmpty()) {
                 BigDecimal amount = new BigDecimal(withdrawAmount);
                 // Ensure your Service has this method matching the DAO rectification we did

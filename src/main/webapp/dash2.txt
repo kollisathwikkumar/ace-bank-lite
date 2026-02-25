@@ -1,0 +1,734 @@
+        <div class="content">
+
+      <!-- ═══════════════ DASHBOARD PAGE ═══════════════ -->
+      <div class="page active" id="page-dashboard">
+
+        <!-- Balance Hero -->
+        <div class="balance-hero">
+          <div class="balance-accent"></div>
+          <div class="balance-main">
+            <div class="balance-label">Total Available Balance</div>
+            <div class="balance-amount outfit" id="heroBalance">₹1,24,530.00</div>
+            <div class="balance-meta">
+              <div class="badge-green">
+                <span class="material-symbols-outlined">arrow_upward</span>
+                +2.4%
+              </div>
+              <span class="account-tag">Primary Savings •••• 4242</span>
+            </div>
+          </div>
+          <div class="balance-actions">
+            <button class="btn-primary ripple-container" id="transferBtn">
+              <span class="material-symbols-outlined">send</span>
+              Transfer Money
+            </button>
+            <button class="btn-secondary ripple-container" id="addFundsBtn">
+              <span class="material-symbols-outlined">add_card</span>
+              Add Funds
+            </button>
+          </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="stat-grid">
+          <div class="stat-card ripple-container" id="incomeCard">
+            <div class="stat-icon" style="background:#ecfdf5">
+              <span class="material-symbols-outlined" style="color:var(--emerald)">trending_up</span>
+            </div>
+            <div class="stat-label">Monthly Income</div>
+            <div class="stat-value outfit">₹42,000</div>
+            <div class="stat-change up">
+              <span class="material-symbols-outlined">arrow_upward</span> +8.2% this month
+            </div>
+          </div>
+          <div class="stat-card ripple-container" id="expenseCard">
+            <div class="stat-icon" style="background:#fff1f2">
+              <span class="material-symbols-outlined" style="color:var(--rose)">trending_down</span>
+            </div>
+            <div class="stat-label">Expenses</div>
+            <div class="stat-value outfit">₹18,240</div>
+            <div class="stat-change down">
+              <span class="material-symbols-outlined">arrow_downward</span> -3.1% vs last
+            </div>
+          </div>
+          <div class="stat-card ripple-container" id="investCard">
+            <div class="stat-icon" style="background:rgba(0,102,255,0.08)">
+              <span class="material-symbols-outlined" style="color:var(--primary)">bar_chart</span>
+            </div>
+            <div class="stat-label">Investments</div>
+            <div class="stat-value outfit">₹64,000</div>
+            <div class="stat-change up">
+              <span class="material-symbols-outlined">arrow_upward</span> +12.5% returns
+            </div>
+          </div>
+          <div class="stat-card ripple-container" id="creditCard2">
+            <div class="stat-icon" style="background:#ecfdf5">
+              <span class="material-symbols-outlined" style="color:var(--emerald)">verified</span>
+            </div>
+            <div class="stat-label">Credit Score</div>
+            <div class="stat-value outfit">812</div>
+            <div class="stat-change up">
+              <span class="material-symbols-outlined">arrow_upward</span> Excellent
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="margin-bottom:0.5rem">
+          <div class="section-header">
+            <div class="section-title">Quick Actions</div>
+          </div>
+          <div class="quick-grid">
+            <button class="quick-btn ripple-container" id="quickSend">
+              <div class="quick-icon" style="background:rgba(0,102,255,0.08)">
+                <span class="material-symbols-outlined" style="color:var(--primary)">send</span>
+              </div>
+              <span class="quick-label">Send Money</span>
+            </button>
+            <button class="quick-btn ripple-container" id="quickReceive">
+              <div class="quick-icon" style="background:#ecfdf5">
+                <span class="material-symbols-outlined" style="color:var(--emerald)">call_received</span>
+              </div>
+              <span class="quick-label">Receive</span>
+            </button>
+            <button class="quick-btn ripple-container" id="quickPay">
+              <div class="quick-icon" style="background:#fff7ed">
+                <span class="material-symbols-outlined" style="color:var(--amber)">qr_code_scanner</span>
+              </div>
+              <span class="quick-label">Scan & Pay</span>
+            </button>
+            <button class="quick-btn ripple-container" id="quickBill">
+              <div class="quick-icon" style="background:#fdf2f8">
+                <span class="material-symbols-outlined" style="color:#a855f7">receipt_long</span>
+              </div>
+              <span class="quick-label">Pay Bills</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bottom Grid -->
+        <div class="bottom-grid">
+          <!-- Transactions -->
+          <div class="card transactions">
+            <div class="section-header">
+              <div class="section-title">Recent Transactions</div>
+              <button class="view-all-btn" id="viewAllTxBtn">
+                View All <span class="material-symbols-outlined">chevron_right</span>
+              </button>
+            </div>
+            <div class="tx-list" id="txList">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <!-- Spending -->
+          <div class="card spending">
+            <div class="section-title" style="margin-bottom:0.25rem">Spending</div>
+            <div class="donut-wrap">
+              <svg viewBox="0 0 36 36">
+                <circle cx="18" cy="18" r="14" fill="transparent" stroke="#f1f5f9" stroke-width="3.5"/>
+                <circle id="donut1" cx="18" cy="18" r="14" fill="transparent" stroke="var(--primary)" stroke-width="3.5"
+                  stroke-dasharray="52.78 87.96" stroke-dashoffset="0" stroke-linecap="round"/>
+                <circle id="donut2" cx="18" cy="18" r="14" fill="transparent" stroke="#0f172a" stroke-width="3.5"
+                  stroke-dasharray="21.99 87.96" stroke-dashoffset="-52.78" stroke-linecap="round"/>
+                <circle id="donut3" cx="18" cy="18" r="14" fill="transparent" stroke="#94a3b8" stroke-width="3.5"
+                  stroke-dasharray="13.19 87.96" stroke-dashoffset="-74.77" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <span class="donut-center-label">Total</span>
+                <span class="donut-center-val outfit">₹18.2k</span>
+              </div>
+            </div>
+            <div class="legend" id="spendingLegend">
+              <div class="legend-item" data-cat="tech">
+                <div class="legend-dot-label">
+                  <div class="legend-dot" style="background:var(--primary)"></div>
+                  <span>Technology</span>
+                </div>
+                <span class="legend-pct">60%</span>
+              </div>
+              <div class="legend-item" data-cat="food">
+                <div class="legend-dot-label">
+                  <div class="legend-dot" style="background:#0f172a"></div>
+                  <span>Food & Drinks</span>
+                </div>
+                <span class="legend-pct">25%</span>
+              </div>
+              <div class="legend-item" data-cat="life">
+                <div class="legend-dot-label">
+                  <div class="legend-dot" style="background:#94a3b8"></div>
+                  <span>Lifestyle</span>
+                </div>
+                <span class="legend-pct">15%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ ACCOUNTS PAGE ═══════════════ -->
+      <div class="page" id="page-accounts">
+        <div class="section-header">
+          <div class="section-title outfit" style="font-size:1.5rem">My Accounts</div>
+          <button class="btn-primary ripple-container" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem" id="addAccountBtn">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>
+            Add Account
+          </button>
+        </div>
+        <div style="display:grid;gap:1rem">
+          <div class="card" style="padding:0;overflow:hidden">
+            <div class="account-row ripple-container" id="acc1">
+              <div class="stat-icon" style="background:rgba(0,102,255,0.08);margin:0">
+                <span class="material-symbols-outlined" style="color:var(--primary)">savings</span>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:0.9rem">Primary Savings</div>
+                <div style="font-size:0.72rem;color:var(--text-3)">Acct •••• 4242 · HDFC Bank</div>
+              </div>
+              <div style="text-align:right">
+                <div class="outfit" style="font-weight:800;font-size:1.1rem">₹1,24,530</div>
+                <div class="badge-green" style="font-size:0.65rem;display:inline-flex;margin-top:4px">Active</div>
+              </div>
+            </div>
+            <div class="account-row ripple-container" id="acc2" style="border-top:1px solid var(--border)">
+              <div class="stat-icon" style="background:#ecfdf5;margin:0">
+                <span class="material-symbols-outlined" style="color:var(--emerald)">account_balance</span>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:0.9rem">Current Account</div>
+                <div style="font-size:0.72rem;color:var(--text-3)">Acct •••• 8891 · SBI Bank</div>
+              </div>
+              <div style="text-align:right">
+                <div class="outfit" style="font-weight:800;font-size:1.1rem">₹48,200</div>
+                <div class="badge-green" style="font-size:0.65rem;display:inline-flex;margin-top:4px">Active</div>
+              </div>
+            </div>
+            <div class="account-row ripple-container" id="acc3" style="border-top:1px solid var(--border)">
+              <div class="stat-icon" style="background:#fff7ed;margin:0">
+                <span class="material-symbols-outlined" style="color:var(--amber)">monitoring</span>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:0.9rem">Investment Portfolio</div>
+                <div style="font-size:0.72rem;color:var(--text-3)">Zerodha Demat · Linked</div>
+              </div>
+              <div style="text-align:right">
+                <div class="outfit" style="font-weight:800;font-size:1.1rem">₹64,000</div>
+                <div style="font-size:0.65rem;color:var(--amber);font-weight:700;margin-top:4px">+12.5%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ TRANSACTIONS PAGE ═══════════════ -->
+      <div class="page" id="page-transactions">
+        <div class="section-header" style="margin-bottom:1.25rem">
+          <div class="section-title outfit" style="font-size:1.5rem">All Transactions</div>
+          <div style="display:flex;gap:0.5rem">
+            <button class="btn-secondary ripple-container" style="width:auto;padding:0.5rem 1rem;font-size:0.78rem" id="filterBtn">
+              <span class="material-symbols-outlined" style="font-size:16px">filter_list</span>
+              Filter
+            </button>
+            <button class="btn-secondary ripple-container" style="width:auto;padding:0.5rem 1rem;font-size:0.78rem" id="exportBtn">
+              <span class="material-symbols-outlined" style="font-size:16px">download</span>
+              Export
+            </button>
+          </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden">
+          <div id="allTxList" style="padding:0.75rem"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ ANALYTICS PAGE ═══════════════ -->
+      <div class="page" id="page-analytics">
+        <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Analytics</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+          <div class="card">
+            <div class="section-header">
+              <div class="section-title">Monthly Spending</div>
+              <select class="form-select" style="width:auto;padding:0.3rem 0.75rem;font-size:0.75rem" id="analyticsYearSel">
+                <option>2023</option><option selected>2024</option>
+              </select>
+            </div>
+            <div class="bar-chart" id="barChart"></div>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem" id="barLabels"></div>
+          </div>
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Income vs Expenses</div>
+            <div style="display:flex;flex-direction:column;gap:1rem">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                  <span style="font-weight:600">Income</span><span class="outfit" style="font-weight:700;color:var(--emerald)">₹42,000</span>
+                </div>
+                <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                  <div style="height:100%;width:70%;background:var(--emerald);border-radius:99px;transition:width 1s var(--transition-smooth)"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                  <span style="font-weight:600">Expenses</span><span class="outfit" style="font-weight:700;color:var(--rose)">₹18,240</span>
+                </div>
+                <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                  <div style="height:100%;width:30%;background:var(--rose);border-radius:99px;transition:width 1s var(--transition-smooth)"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                  <span style="font-weight:600">Savings Rate</span><span class="outfit" style="font-weight:700;color:var(--primary)">56.6%</span>
+                </div>
+                <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                  <div style="height:100%;width:56.6%;background:var(--primary);border-radius:99px;transition:width 1s var(--transition-smooth)"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card" style="grid-column:span 2">
+            <div class="section-title" style="margin-bottom:1rem">Top Spending Categories</div>
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem" id="categoryCards"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ CARDS PAGE ═══════════════ -->
+      <div class="page" id="page-cards">
+        <div class="section-header" style="margin-bottom:1.25rem">
+          <div class="section-title outfit" style="font-size:1.5rem">My Cards</div>
+          <button class="btn-primary ripple-container" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem" id="applyCardBtn">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>
+            Apply for Card
+          </button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+          <div>
+            <div class="credit-card-display" id="visaCard">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:1.1rem;opacity:0.9">ACE Platinum</span>
+                <span class="material-symbols-outlined" style="font-size:28px;opacity:0.7">contactless</span>
+              </div>
+              <div style="font-size:1.25rem;letter-spacing:0.2em;font-family:'Outfit',sans-serif;font-weight:600;opacity:0.95">4242 •••• •••• 4242</div>
+              <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                <div>
+                  <div style="font-size:0.6rem;opacity:0.5;text-transform:uppercase;letter-spacing:0.1em">Card Holder</div>
+                  <div style="font-weight:700;font-size:0.85rem">Alex Sterling</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:0.6rem;opacity:0.5;text-transform:uppercase;letter-spacing:0.1em">Expires</div>
+                  <div style="font-weight:700;font-size:0.85rem">09/28</div>
+                </div>
+                <svg width="42" height="28" viewBox="0 0 42 28" style="opacity:0.9">
+                  <circle cx="14" cy="14" r="14" fill="#eb001b" fill-opacity="0.8"/>
+                  <circle cx="28" cy="14" r="14" fill="#f79e1b" fill-opacity="0.8"/>
+                </svg>
+              </div>
+            </div>
+            <div style="display:flex;gap:0.75rem;margin-top:1rem">
+              <button class="btn-secondary ripple-container" style="flex:1;font-size:0.78rem;padding:0.6rem" id="freezeCardBtn">
+                <span class="material-symbols-outlined" style="font-size:16px">ac_unit</span>
+                Freeze Card
+              </button>
+              <button class="btn-secondary ripple-container" style="flex:1;font-size:0.78rem;padding:0.6rem" id="cardDetailsBtn">
+                <span class="material-symbols-outlined" style="font-size:16px">visibility</span>
+                View Details
+              </button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="section-title" style="margin-bottom:1rem">Card Spend This Month</div>
+            <div style="display:flex;flex-direction:column;gap:0.875rem">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:0.8rem;color:var(--text-2)">Limit</span>
+                <span class="outfit" style="font-weight:700">₹2,00,000</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <span style="font-size:0.8rem;color:var(--text-2)">Used</span>
+                <span class="outfit" style="font-weight:700;color:var(--rose)">₹94,789</span>
+              </div>
+              <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                <div style="height:100%;width:47.4%;background:linear-gradient(90deg,var(--primary),var(--rose));border-radius:99px"></div>
+              </div>
+              <div style="font-size:0.72rem;color:var(--text-3)">47.4% of limit used</div>
+              <hr style="border:none;border-top:1px solid var(--border);margin:0.25rem 0"/>
+              <div style="display:flex;flex-direction:column;gap:0.5rem">
+                <div class="tx-item ripple-container" style="padding:0.6rem 0.5rem">
+                  <div class="tx-icon" style="width:34px;height:34px"><span class="material-symbols-outlined" style="font-size:17px">shopping_bag</span></div>
+                  <div class="tx-info"><div class="tx-name" style="font-size:0.8rem">Apple Store</div><div class="tx-meta">Oct 24</div></div>
+                  <div class="tx-amount debit" style="font-size:0.82rem">- ₹89,900</div>
+                </div>
+                <div class="tx-item ripple-container" style="padding:0.6rem 0.5rem">
+                  <div class="tx-icon" style="width:34px;height:34px"><span class="material-symbols-outlined" style="font-size:17px">restaurant</span></div>
+                  <div class="tx-info"><div class="tx-name" style="font-size:0.8rem">The Table</div><div class="tx-meta">Oct 20</div></div>
+                  <div class="tx-amount debit" style="font-size:0.82rem">- ₹4,240</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SETTINGS PAGE ═══════════════ -->
+      <div class="page" id="page-settings">
+        <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Settings</div>
+        <div class="card" style="max-width:600px">
+          <div style="font-weight:700;font-size:0.85rem;margin-bottom:1rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em">Notifications</div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">Transaction Alerts</div>
+              <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Get notified for every transaction</div>
+            </div>
+            <button class="toggle on" data-setting="txalert"></button>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">Payment Reminders</div>
+              <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Remind me of upcoming bill payments</div>
+            </div>
+            <button class="toggle on" data-setting="reminders"></button>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">Marketing Emails</div>
+              <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Receive offers and promotions</div>
+            </div>
+            <button class="toggle" data-setting="marketing"></button>
+          </div>
+          <div style="font-weight:700;font-size:0.85rem;margin:1.5rem 0 1rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em">Security</div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">Two-Factor Authentication</div>
+              <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Secure your account with 2FA</div>
+            </div>
+            <button class="toggle on" data-setting="2fa"></button>
+          </div>
+          <div class="setting-row">
+            <div>
+              <div style="font-weight:600;font-size:0.875rem">Biometric Login</div>
+              <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Use fingerprint or face ID</div>
+            </div>
+            <button class="toggle" data-setting="biometric"></button>
+          </div>
+          <div style="margin-top:1.5rem;display:flex;gap:0.75rem">
+            <button class="btn-primary ripple-container" style="width:auto;padding:0.65rem 1.5rem;font-size:0.82rem" id="saveSettingsBtn">Save Changes</button>
+            <button class="btn-secondary ripple-container" style="width:auto;padding:0.65rem 1.5rem;font-size:0.82rem" id="resetSettingsBtn">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════ SUPPORT PAGE ═══════════════ -->
+      <div class="page" id="page-support">
+        <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Support Center</div>
+        <div style="max-width:600px">
+          <div class="support-card ripple-container" id="chatSupportBtn">
+            <div class="stat-icon" style="background:rgba(0,102,255,0.08);margin:0;flex-shrink:0">
+              <span class="material-symbols-outlined" style="color:var(--primary)">chat</span>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem">Live Chat Support</div>
+              <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Chat with our agents — Available 24/7</div>
+            </div>
+            <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+          </div>
+          <div class="support-card ripple-container" id="callSupportBtn">
+            <div class="stat-icon" style="background:#ecfdf5;margin:0;flex-shrink:0">
+              <span class="material-symbols-outlined" style="color:var(--emerald)">phone_in_talk</span>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem">Call Support</div>
+              <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">+91 1800-XXX-XXXX · Mon–Fri 9AM–6PM</div>
+            </div>
+            <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+          </div>
+          <div class="support-card ripple-container" id="faqBtn">
+            <div class="stat-icon" style="background:#fff7ed;margin:0;flex-shrink:0">
+              <span class="material-symbols-outlined" style="color:var(--amber)">help</span>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem">FAQ & Knowledge Base</div>
+              <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Browse 200+ articles and guides</div>
+            </div>
+            <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+          </div>
+          <div class="support-card ripple-container" id="ticketBtn">
+            <div class="stat-icon" style="background:#fdf2f8;margin:0;flex-shrink:0">
+              <span class="material-symbols-outlined" style="color:#a855f7">confirmation_number</span>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem">Submit a Ticket</div>
+              <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Get help for complex issues in 24h</div>
+            </div>
+            <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </main>
+</div>
+
+<!-- ─────────── NOTIFICATIONS PANEL ─────────── -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-header">
+    <span class="notif-panel-title">Notifications</span>
+    <button class="mark-all-btn" id="markAllBtn">Mark all read</button>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+<!-- ─────────── MODAL: TRANSFER ─────────── -->
+<div class="modal-overlay" id="transferModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Transfer Money</span>
+      <button class="modal-close" data-modal="transferModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Recipient Name / UPI ID</label>
+      <input class="form-input" id="tfRecipient" placeholder="name@upi or +91XXXXXXXXXX" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Amount (₹)</label>
+      <input class="form-input" id="tfAmount" placeholder="0.00" type="number" min="1"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Note (optional)</label>
+      <input class="form-input" id="tfNote" placeholder="Add a note..." type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">From Account</label>
+      <select class="form-select" id="tfFrom">
+        <option>Primary Savings •••• 4242</option>
+        <option>Current Account •••• 8891</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="transferModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmTransferBtn">
+        <span class="material-symbols-outlined">send</span> Transfer
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: ADD FUNDS ─────────── -->
+<div class="modal-overlay" id="addFundsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Add Funds</span>
+      <button class="modal-close" data-modal="addFundsModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Amount (₹)</label>
+      <input class="form-input" id="afAmount" placeholder="0.00" type="number" min="1"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment Method</label>
+      <select class="form-select" id="afMethod">
+        <option>UPI</option>
+        <option>Net Banking</option>
+        <option>Debit Card</option>
+        <option>NEFT/RTGS</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">To Account</label>
+      <select class="form-select">
+        <option>Primary Savings •••• 4242</option>
+        <option>Current Account •••• 8891</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="addFundsModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmAddFundsBtn">
+        <span class="material-symbols-outlined">add_card</span> Add Funds
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: NEW PAYMENT ─────────── -->
+<div class="modal-overlay" id="newPaymentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">New Payment</span>
+      <button class="modal-close" data-modal="newPaymentModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payment Type</label>
+      <select class="form-select" id="npType">
+        <option>Bill Payment</option>
+        <option>Transfer</option>
+        <option>Subscription</option>
+        <option>Loan EMI</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Payee / Biller</label>
+      <input class="form-input" id="npPayee" placeholder="Enter payee name..." type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Amount (₹)</label>
+      <input class="form-input" id="npAmount" placeholder="0.00" type="number" min="1"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Schedule</label>
+      <select class="form-select" id="npSchedule">
+        <option>Pay Now</option>
+        <option>Tomorrow</option>
+        <option>This Weekend</option>
+        <option>Choose Date</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="newPaymentModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmPaymentBtn">
+        <span class="material-symbols-outlined">payments</span> Pay Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: ADD ACCOUNT ─────────── -->
+<div class="modal-overlay" id="addAccountModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Link New Account</span>
+      <button class="modal-close" data-modal="addAccountModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Bank Name</label>
+      <input class="form-input" id="aaBank" placeholder="e.g. HDFC, ICICI, Axis..." type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account Number</label>
+      <input class="form-input" id="aaAccNum" placeholder="Enter account number" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">IFSC Code</label>
+      <input class="form-input" id="aaIFSC" placeholder="e.g. HDFC0001234" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Account Type</label>
+      <select class="form-select">
+        <option>Savings</option><option>Current</option><option>Salary</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="addAccountModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmAddAccountBtn">
+        <span class="material-symbols-outlined">link</span> Link Account
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: SCAN & PAY ─────────── -->
+<div class="modal-overlay" id="scanPayModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Scan & Pay</span>
+      <button class="modal-close" data-modal="scanPayModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div style="text-align:center;padding:1.5rem 0">
+      <div style="width:160px;height:160px;background:#f8fafc;border-radius:1rem;margin:0 auto;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border)">
+        <span class="material-symbols-outlined" style="font-size:64px;color:var(--text-3)">qr_code_2</span>
+      </div>
+      <p style="font-size:0.82rem;color:var(--text-3);margin-top:1rem">Camera access required to scan QR code</p>
+      <p style="font-size:0.75rem;color:var(--text-3)">— or enter UPI ID manually —</p>
+    </div>
+    <div class="form-group">
+      <label class="form-label">UPI ID</label>
+      <input class="form-input" id="spUPI" placeholder="name@upi" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Amount (₹)</label>
+      <input class="form-input" id="spAmount" placeholder="0.00" type="number" min="1"/>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="scanPayModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmScanPayBtn">
+        <span class="material-symbols-outlined">qr_code_scanner</span> Pay
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: APPLY CARD ─────────── -->
+<div class="modal-overlay" id="applyCardModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Apply for New Card</span>
+      <button class="modal-close" data-modal="applyCardModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Card Type</label>
+      <select class="form-select">
+        <option>ACE Platinum Credit Card</option>
+        <option>ACE Gold Debit Card</option>
+        <option>ACE Rewards Credit Card</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Annual Income (₹)</label>
+      <input class="form-input" placeholder="Enter annual income" type="number"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Employment Type</label>
+      <select class="form-select">
+        <option>Salaried</option><option>Self-Employed</option><option>Business Owner</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="applyCardModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmApplyCardBtn">
+        <span class="material-symbols-outlined">credit_card</span> Apply Now
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── MODAL: SUBMIT TICKET ─────────── -->
+<div class="modal-overlay" id="ticketModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Submit Support Ticket</span>
+      <button class="modal-close" data-modal="ticketModal">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Issue Category</label>
+      <select class="form-select">
+        <option>Transaction Issue</option><option>Card Problem</option><option>Login / Access</option><option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <input class="form-input" placeholder="Brief description of the issue" type="text"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Description</label>
+      <textarea class="form-input" placeholder="Describe the issue in detail..." rows="4" style="resize:vertical"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary ripple-container" data-modal="ticketModal">Cancel</button>
+      <button class="btn-primary ripple-container" id="confirmTicketBtn">
+        <span class="material-symbols-outlined">confirmation_number</span> Submit
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────── TOAST CONTAINER ─────────── -->
+<div class="toast-container" id="toastContainer"></div>

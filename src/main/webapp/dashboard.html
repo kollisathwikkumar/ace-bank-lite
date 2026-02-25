@@ -1,0 +1,2993 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>ACE Bank — Premium Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --primary: #0066ff;
+      --primary-dark: #0047cc;
+      --primary-glow: rgba(0, 102, 255, 0.25);
+      --bg-dark: #08080f;
+      --bg-main: #f0f2f7;
+      --surface: #ffffff;
+      --emerald: #10b981;
+      --rose: #f43f5e;
+      --amber: #f59e0b;
+      --sidebar-w: 260px;
+      --header-h: 68px;
+      --border: rgba(0, 0, 0, 0.07);
+      --text-1: #0f172a;
+      --text-2: #64748b;
+      --text-3: #94a3b8;
+      --radius-lg: 1.25rem;
+      --radius-xl: 1.75rem;
+      --radius-full: 9999px;
+      --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 4px 24px rgba(0, 0, 0, 0.04);
+      --shadow-btn: 0 4px 20px rgba(0, 102, 255, 0.35);
+      --transition: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --transition-smooth: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 15px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-main);
+      color: var(--text-1);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .outfit {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.12);
+      border-radius: 99px;
+    }
+
+    /* ─── Layout ─── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─── Sidebar ─── */
+    aside {
+      width: var(--sidebar-w);
+      background: var(--bg-dark);
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    aside::before {
+      content: '';
+      position: absolute;
+      top: -80px;
+      left: -60px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(0, 102, 255, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .sidebar-logo {
+      padding: 1.6rem 1.6rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.4);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-icon::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      animation: shimmer 3s ease infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        left: -100%;
+      }
+
+      100% {
+        left: 200%;
+      }
+    }
+
+    .logo-icon .material-symbols-outlined {
+      color: white;
+      font-size: 20px;
+    }
+
+    .logo-text {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: white;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-section-label {
+      padding: 1.4rem 1.4rem 0.4rem;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: #334155;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    nav {
+      flex: 1;
+      padding: 0 0.75rem;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 1rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: #64748b;
+      transition: all 0.2s var(--transition-smooth);
+      position: relative;
+      margin-bottom: 2px;
+      border: 1px solid transparent;
+      user-select: none;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #94a3b8;
+      transform: translateX(2px);
+    }
+
+    .nav-item:active {
+      transform: translateX(2px) scale(0.98);
+    }
+
+    .nav-item.active {
+      background: rgba(0, 102, 255, 0.12);
+      color: var(--primary);
+      border-color: rgba(0, 102, 255, 0.15);
+    }
+
+    .nav-item.active .material-symbols-outlined {
+      color: var(--primary);
+    }
+
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 20%;
+      bottom: 20%;
+      width: 3px;
+      background: var(--primary);
+      border-radius: 99px 0 0 99px;
+      animation: slideIn 0.2s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: scaleY(0);
+      }
+
+      to {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+
+    .nav-item .material-symbols-outlined {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--primary);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 99px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .sidebar-user {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      border-radius: 0 0 0 0;
+    }
+
+    .sidebar-user:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: white;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .user-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .user-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: white;
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 0.65rem;
+      color: #334155;
+      margin-top: 1px;
+    }
+
+    .logout-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .logout-btn:hover {
+      color: var(--rose);
+      background: rgba(244, 63, 94, 0.1);
+    }
+
+    .logout-btn .material-symbols-outlined {
+      font-size: 18px;
+    }
+
+    /* ─── Main ─── */
+    main {
+      flex: 1;
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ─── Header ─── */
+    header {
+      height: var(--header-h);
+      background: rgba(240, 242, 247, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+    }
+
+    .search-wrap .material-symbols-outlined {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-3);
+      font-size: 18px;
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 0.55rem 1rem 0.55rem 2.75rem;
+      font-size: 0.8rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-1);
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .search-input::placeholder {
+      color: var(--text-3);
+    }
+
+    .search-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-left: auto;
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s var(--transition);
+      color: var(--text-2);
+    }
+
+    .icon-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: scale(1.08);
+    }
+
+    .icon-btn:active {
+      transform: scale(0.95);
+    }
+
+    .icon-btn .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      border: 2px solid var(--bg-main);
+      animation: pulse-dot 2s ease infinite;
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(0, 102, 255, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 4px rgba(0, 102, 255, 0);
+      }
+    }
+
+    .cta-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--bg-dark);
+      color: white;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.55rem 1.1rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.2s var(--transition);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .cta-btn:hover {
+      background: var(--primary);
+      transform: scale(1.04);
+      box-shadow: var(--shadow-btn);
+    }
+
+    .cta-btn:active {
+      transform: scale(0.97);
+    }
+
+    .cta-btn .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    /* ─── Page Content ─── */
+    .content {
+      padding: 1.75rem 2rem;
+      flex: 1;
+    }
+
+    /* ─── Section Headers ─── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .view-all-btn {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      color: var(--primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+
+    .view-all-btn:hover {
+      background: rgba(0, 102, 255, 0.07);
+    }
+
+    .view-all-btn .material-symbols-outlined {
+      font-size: 16px;
+    }
+
+    /* ─── Balance Hero ─── */
+    .balance-hero {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .balance-accent {
+      width: 4px;
+      background: linear-gradient(180deg, var(--primary), #0044bb);
+      flex-shrink: 0;
+      border-radius: 4px 0 0 4px;
+    }
+
+    .balance-main {
+      padding: 1.75rem 2rem;
+      flex: 1;
+    }
+
+    .balance-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-3);
+      margin-bottom: 0.5rem;
+    }
+
+    .balance-amount {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .balance-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.25rem;
+    }
+
+    .badge-green {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      background: #ecfdf5;
+      color: var(--emerald);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+
+    .badge-green .material-symbols-outlined {
+      font-size: 13px;
+    }
+
+    .account-tag {
+      font-size: 0.72rem;
+      color: var(--text-3);
+    }
+
+    .balance-actions {
+      padding: 1.25rem 1.5rem;
+      border-left: 1.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.6rem;
+      min-width: 220px;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-full);
+      padding: 0.7rem 1.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s var(--transition);
+      box-shadow: var(--shadow-btn);
+      width: 100%;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(0, 102, 255, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0) scale(0.97);
+    }
+
+    .btn-primary .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .btn-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      background: #f1f5f9;
+      color: var(--text-1);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-full);
+      padding: 0.7rem 1.5rem;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s var(--transition);
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    /* ─── Stat Cards ─── */
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s var(--transition-smooth);
+      animation: fadeUp 0.5s ease both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      border-color: rgba(0, 102, 255, 0.2);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, transparent 60%, rgba(0, 102, 255, 0.03));
+      pointer-events: none;
+    }
+
+    .stat-card:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .stat-card:nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .stat-card:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .stat-card:nth-child(4) {
+      animation-delay: 0.2s;
+    }
+
+    .stat-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon .material-symbols-outlined {
+      font-size: 19px;
+    }
+
+    .stat-label {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-change {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-top: 0.4rem;
+    }
+
+    .stat-change .material-symbols-outlined {
+      font-size: 13px;
+    }
+
+    .stat-change.up {
+      color: var(--emerald);
+    }
+
+    .stat-change.down {
+      color: var(--rose);
+    }
+
+    /* ─── Bottom Grid ─── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    /* ─── Transactions ─── */
+    .card {
+      background: white;
+      border-radius: var(--radius-xl);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--shadow-card);
+      padding: 1.5rem;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .card.transactions {
+      grid-column: span 2;
+      animation-delay: 0.1s;
+    }
+
+    .card.spending {
+      animation-delay: 0.15s;
+    }
+
+    .tx-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .tx-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0.75rem;
+      border-radius: 0.875rem;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      border: 1px solid transparent;
+    }
+
+    .tx-item:hover {
+      background: #f8fafc;
+      border-color: var(--border);
+      transform: translateX(2px);
+    }
+
+    .tx-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: #f1f5f9;
+    }
+
+    .tx-icon .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--text-2);
+    }
+
+    .tx-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tx-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .tx-meta {
+      font-size: 0.7rem;
+      color: var(--text-3);
+      margin-top: 1px;
+    }
+
+    .tx-amount {
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tx-amount.credit {
+      color: var(--emerald);
+    }
+
+    .tx-amount.debit {
+      color: var(--text-1);
+    }
+
+    /* ─── Donut Chart ─── */
+    .donut-wrap {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 1rem auto;
+    }
+
+    .donut-wrap svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donut-center-label {
+      font-size: 0.62rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-3);
+    }
+
+    .donut-center-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 0.4rem 0.5rem;
+      border-radius: 8px;
+      transition: background 0.15s;
+      font-size: 0.8rem;
+    }
+
+    .legend-item:hover {
+      background: #f8fafc;
+    }
+
+    .legend-dot-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-pct {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+
+    /* ─── Quick Actions ─── */
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quick-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 0.5rem;
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s var(--transition);
+      animation: fadeUp 0.4s ease both;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .quick-btn:hover {
+      border-color: var(--primary);
+      background: rgba(0, 102, 255, 0.03);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0, 102, 255, 0.12);
+    }
+
+    .quick-btn:active {
+      transform: scale(0.96);
+    }
+
+    .quick-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quick-icon .material-symbols-outlined {
+      font-size: 22px;
+    }
+
+    .quick-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--text-2);
+      text-align: center;
+    }
+
+    /* ─── Modals ─── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 8, 15, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: white;
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 460px;
+      padding: 2rem;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.25);
+      transform: translateY(20px) scale(0.97);
+      transition: all 0.3s var(--transition);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-2);
+      transition: all 0.15s;
+    }
+
+    .modal-close:hover {
+      background: #f1f5f9;
+      color: var(--text-1);
+    }
+
+    .modal-close .material-symbols-outlined {
+      font-size: 17px;
+    }
+
+    .form-group {
+      margin-bottom: 1.1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-2);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 0.75rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.875rem;
+      font-family: 'DM Sans', sans-serif;
+      color: var(--text-1);
+      outline: none;
+      transition: all 0.2s;
+      appearance: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--primary);
+      background: white;
+      box-shadow: 0 0 0 3px var(--primary-glow);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-3);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .modal-actions .btn-primary {
+      flex: 1;
+    }
+
+    .modal-actions .btn-secondary {
+      flex: 1;
+    }
+
+    /* ─── Toast ─── */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: white;
+      border-radius: 0.875rem;
+      padding: 0.875rem 1.25rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      border-left: 4px solid var(--emerald);
+      min-width: 280px;
+      transform: translateX(120%);
+      transition: transform 0.4s var(--transition);
+      pointer-events: all;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    .toast.error {
+      border-left-color: var(--rose);
+    }
+
+    .toast.info {
+      border-left-color: var(--primary);
+    }
+
+    .toast.warn {
+      border-left-color: var(--amber);
+    }
+
+    .toast-icon .material-symbols-outlined {
+      font-size: 20px;
+      color: var(--emerald);
+    }
+
+    .toast.error .toast-icon .material-symbols-outlined {
+      color: var(--rose);
+    }
+
+    .toast.info .toast-icon .material-symbols-outlined {
+      color: var(--primary);
+    }
+
+    .toast.warn .toast-icon .material-symbols-outlined {
+      color: var(--amber);
+    }
+
+    .toast-text {
+      font-size: 0.82rem;
+      font-weight: 600;
+      flex: 1;
+    }
+
+    /* ─── Notifications Panel ─── */
+    .notif-panel {
+      position: fixed;
+      top: var(--header-h);
+      right: 0;
+      width: 340px;
+      height: calc(100vh - var(--header-h));
+      background: white;
+      border-left: 1.5px solid var(--border);
+      box-shadow: -8px 0 40px rgba(0, 0, 0, 0.08);
+      z-index: 150;
+      transform: translateX(100%);
+      transition: transform 0.3s var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .notif-panel.open {
+      transform: translateX(0);
+    }
+
+    .notif-panel-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .notif-panel-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .mark-all-btn {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .mark-all-btn:hover {
+      background: rgba(0, 102, 255, 0.07);
+    }
+
+    .notif-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+
+    .notif-item {
+      display: flex;
+      gap: 0.75rem;
+      padding: 0.875rem;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+    }
+
+    .notif-item:hover {
+      background: #f8fafc;
+      border-color: var(--border);
+    }
+
+    .notif-item.unread {
+      background: rgba(0, 102, 255, 0.03);
+    }
+
+    .notif-dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .notif-content-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+
+    .notif-time {
+      font-size: 0.68rem;
+      color: var(--text-3);
+    }
+
+    /* ─── Cards Page (credit cards) ─── */
+    .credit-card-display {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0066ff 100%);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 1.586;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.3s var(--transition);
+      box-shadow: 0 12px 40px rgba(0, 102, 255, 0.3);
+    }
+
+    .credit-card-display:hover {
+      transform: translateY(-4px) rotate(-1deg);
+    }
+
+    .credit-card-display::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ─── Animations stagger helpers ─── */
+    .stagger-1 {
+      animation-delay: 0.05s;
+    }
+
+    .stagger-2 {
+      animation-delay: 0.1s;
+    }
+
+    .stagger-3 {
+      animation-delay: 0.15s;
+    }
+
+    .stagger-4 {
+      animation-delay: 0.2s;
+    }
+
+    /* ─── Page views ─── */
+    .page {
+      display: none;
+      animation: fadeUp 0.35s ease both;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ─── Accounts page ─── */
+    .account-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0.75rem;
+      border-radius: 0.875rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s;
+    }
+
+    .account-row:hover {
+      background: #f8fafc;
+      border-color: var(--border);
+    }
+
+    .account-row+.account-row {
+      border-top: 1px solid var(--border);
+      border-radius: 0;
+    }
+
+    .account-row:last-child {
+      border-radius: 0 0 0.875rem 0.875rem;
+    }
+
+    /* ─── Analytics Bars ─── */
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      height: 120px;
+      margin: 1rem 0;
+    }
+
+    .bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .bar {
+      width: 100%;
+      border-radius: 6px 6px 0 0;
+      background: var(--primary);
+      opacity: 0.15;
+      transition: all 0.4s var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .bar.active-bar {
+      opacity: 1;
+    }
+
+    .bar:hover {
+      opacity: 0.8;
+    }
+
+    .bar-label {
+      font-size: 0.62rem;
+      color: var(--text-3);
+      font-weight: 600;
+    }
+
+    /* ─── Settings ─── */
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s;
+      border: none;
+      flex-shrink: 0;
+    }
+
+    .toggle.on {
+      background: var(--primary);
+    }
+
+    .toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s var(--transition);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle.on::after {
+      transform: translateX(20px);
+    }
+
+    /* ─── Page transitions ─── */
+    @keyframes pageFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .page.active {
+      animation: pageFadeUp 0.3s ease both;
+    }
+
+    /* ─── Support page ─── */
+    .support-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s var(--transition-smooth);
+      margin-bottom: 0.75rem;
+    }
+
+    .support-card:hover {
+      border-color: var(--primary);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(0, 102, 255, 0.08);
+    }
+
+    /* ─── Ripple ─── */
+    .ripple-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    .ripple-effect {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(0, 102, 255, 0.15);
+      transform: scale(0);
+      animation: ripple 0.5s linear;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <!-- ─────────── SIDEBAR ─────────── -->
+    <aside id="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon">
+          <span class="material-symbols-outlined">bolt</span>
+        </div>
+        <span class="logo-text">ACE BANK</span>
+      </div>
+
+      <nav>
+        <div class="nav-item active ripple-container" data-page="dashboard">
+          <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">dashboard</span>
+          <span>Dashboard</span>
+        </div>
+        <div class="nav-item ripple-container" data-page="accounts">
+          <span class="material-symbols-outlined">account_balance_wallet</span>
+          <span>Accounts</span>
+        </div>
+        <div class="nav-item ripple-container" data-page="transactions">
+          <span class="material-symbols-outlined">swap_horiz</span>
+          <span>Transactions</span>
+
+        </div>
+        <div class="nav-item ripple-container" data-page="analytics">
+          <span class="material-symbols-outlined">monitoring</span>
+          <span>Analytics</span>
+        </div>
+        <div class="nav-item ripple-container" data-page="cards">
+          <span class="material-symbols-outlined">credit_card</span>
+          <span>Cards</span>
+        </div>
+
+        <div class="nav-section-label">Preferences</div>
+
+        <div class="nav-item ripple-container" data-page="settings">
+          <span class="material-symbols-outlined">settings</span>
+          <span>Settings</span>
+        </div>
+        <div class="nav-item ripple-container" data-page="support">
+          <span class="material-symbols-outlined">help_outline</span>
+          <span>Support</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-user">
+        <div class="user-avatar">AS</div>
+        <div class="user-info">
+          <div class="user-name"></div>
+          <div class="user-role">Premium Member</div>
+        </div>
+        <button class="logout-btn" id="logoutBtn" title="Sign out">
+          <span class="material-symbols-outlined">logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ─────────── MAIN ─────────── -->
+    <main>
+      <!-- Header -->
+      <header>
+        <div class="search-wrap">
+          <span class="material-symbols-outlined">search</span>
+          <input class="search-input" id="searchInput" placeholder="Search transactions, assets..." type="text" />
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" id="themeBtn" title="Toggle theme">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </button>
+          <button class="icon-btn" id="notifBtn" title="Notifications">
+            <span class="material-symbols-outlined">notifications</span>
+            <span class="notif-dot" id="notifDot"></span>
+          </button>
+          <button class="cta-btn ripple-container" id="newPaymentBtn">
+            <span class="material-symbols-outlined">add</span>
+            NEW PAYMENT
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <div class="content">
+
+        <!-- ═══════════════ DASHBOARD PAGE ═══════════════ -->
+        <div class="page active" id="page-dashboard">
+
+          <!-- Balance Hero -->
+          <div class="balance-hero">
+            <div class="balance-accent"></div>
+            <div class="balance-main">
+              <div class="balance-label">Total Available Balance</div>
+              <div class="balance-amount outfit" id="heroBalance">₹0.00</div>
+              <div class="balance-meta">
+                <div class="badge-green">
+                  <span class="material-symbols-outlined">arrow_upward</span>
+                  +2.4%
+                </div>
+                <span class="account-tag">Primary Savings •••• 4242</span>
+              </div>
+            </div>
+            <div class="balance-actions">
+              <button class="btn-primary ripple-container" id="transferBtn">
+                <span class="material-symbols-outlined">send</span>
+                Transfer Money
+              </button>
+              <button class="btn-secondary ripple-container" id="addFundsBtn">
+                <span class="material-symbols-outlined">add_card</span>
+                Add Funds
+              </button>
+            </div>
+          </div>
+
+          <!-- Stat Cards -->
+          <div class="stat-grid">
+            <div class="stat-card ripple-container" id="incomeCard">
+              <div class="stat-icon" style="background:#ecfdf5">
+                <span class="material-symbols-outlined" style="color:var(--emerald)">trending_up</span>
+              </div>
+              <div class="stat-label">Monthly Income</div>
+              <div class="stat-value outfit" id="statIncome">₹0</div>
+              <div class="stat-change up">
+                <span class="material-symbols-outlined">arrow_upward</span> +8.2% this month
+              </div>
+            </div>
+            <div class="stat-card ripple-container" id="expenseCard">
+              <div class="stat-icon" style="background:#fff1f2">
+                <span class="material-symbols-outlined" style="color:var(--rose)">trending_down</span>
+              </div>
+              <div class="stat-label">Expenses</div>
+              <div class="stat-value outfit" id="statExpenses">₹0</div>
+              <div class="stat-change down">
+                <span class="material-symbols-outlined">arrow_downward</span> -3.1% vs last
+              </div>
+            </div>
+            <div class="stat-card ripple-container" id="investCard">
+              <div class="stat-icon" style="background:rgba(0,102,255,0.08)">
+                <span class="material-symbols-outlined" style="color:var(--primary)">bar_chart</span>
+              </div>
+              <div class="stat-label">Investments</div>
+              <div class="stat-value outfit" id="statInvestments">₹0</div>
+              <div class="stat-change up">
+                <span class="material-symbols-outlined">arrow_upward</span> +12.5% returns
+              </div>
+            </div>
+            <div class="stat-card ripple-container" id="creditCard2">
+              <div class="stat-icon" style="background:#ecfdf5">
+                <span class="material-symbols-outlined" style="color:var(--emerald)">verified</span>
+              </div>
+              <div class="stat-label">Credit Score</div>
+              <div class="stat-value outfit" id="statCredit">--</div>
+              <div class="stat-change up">
+                <span class="material-symbols-outlined">arrow_upward</span> Excellent
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div style="margin-bottom:0.5rem">
+            <div class="section-header">
+              <div class="section-title">Quick Actions</div>
+            </div>
+            <div class="quick-grid">
+              <button class="quick-btn ripple-container" id="quickSend">
+                <div class="quick-icon" style="background:rgba(0,102,255,0.08)">
+                  <span class="material-symbols-outlined" style="color:var(--primary)">send</span>
+                </div>
+                <span class="quick-label">Send Money</span>
+              </button>
+              <button class="quick-btn ripple-container" id="quickReceive">
+                <div class="quick-icon" style="background:#ecfdf5">
+                  <span class="material-symbols-outlined" style="color:var(--emerald)">call_received</span>
+                </div>
+                <span class="quick-label">Receive</span>
+              </button>
+              <button class="quick-btn ripple-container" id="quickPay">
+                <div class="quick-icon" style="background:#fff7ed">
+                  <span class="material-symbols-outlined" style="color:var(--amber)">qr_code_scanner</span>
+                </div>
+                <span class="quick-label">Scan & Pay</span>
+              </button>
+              <button class="quick-btn ripple-container" id="quickBill">
+                <div class="quick-icon" style="background:#fdf2f8">
+                  <span class="material-symbols-outlined" style="color:#a855f7">receipt_long</span>
+                </div>
+                <span class="quick-label">Pay Bills</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Bottom Grid -->
+          <div class="bottom-grid">
+            <!-- Transactions -->
+            <div class="card transactions">
+              <div class="section-header">
+                <div class="section-title">Recent Transactions</div>
+                <button class="view-all-btn" id="viewAllTxBtn">
+                  View All <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+              </div>
+              <div class="tx-list" id="txList">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Spending -->
+            <div class="card spending">
+              <div class="section-title" style="margin-bottom:0.25rem">Spending</div>
+              <div class="donut-wrap">
+                <svg viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="14" fill="transparent" stroke="#f1f5f9" stroke-width="3.5" />
+                  <circle id="donut1" cx="18" cy="18" r="14" fill="transparent" stroke="var(--primary)"
+                    stroke-width="3.5" stroke-dasharray="0 87.96" stroke-dashoffset="0" stroke-linecap="round" />
+                  <circle id="donut2" cx="18" cy="18" r="14" fill="transparent" stroke="#0f172a" stroke-width="3.5"
+                    stroke-dasharray="0 87.96" stroke-dashoffset="0" stroke-linecap="round" />
+                  <circle id="donut3" cx="18" cy="18" r="14" fill="transparent" stroke="#94a3b8" stroke-width="3.5"
+                    stroke-dasharray="0 87.96" stroke-dashoffset="0" stroke-linecap="round" />
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-center-label">Total</span>
+                  <span class="donut-center-val outfit" id="donutTotal">₹0</span>
+                </div>
+              </div>
+              <div class="legend" id="spendingLegend">
+                <div class="legend-item" data-cat="tech">
+                  <div class="legend-dot-label">
+                    <div class="legend-dot" style="background:var(--primary)"></div>
+                    <span>Technology</span>
+                  </div>
+                  <span class="legend-pct">0%</span>
+                </div>
+                <div class="legend-item" data-cat="food">
+                  <div class="legend-dot-label">
+                    <div class="legend-dot" style="background:#0f172a"></div>
+                    <span>Food & Drinks</span>
+                  </div>
+                  <span class="legend-pct">0%</span>
+                </div>
+                <div class="legend-item" data-cat="life">
+                  <div class="legend-dot-label">
+                    <div class="legend-dot" style="background:#94a3b8"></div>
+                    <span>Lifestyle</span>
+                  </div>
+                  <span class="legend-pct">0%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ ACCOUNTS PAGE ═══════════════ -->
+        <div class="page" id="page-accounts">
+          <div class="section-header">
+            <div class="section-title outfit" style="font-size:1.5rem">My Accounts</div>
+            <button class="btn-primary ripple-container" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem"
+              id="addAccountBtn">
+              <span class="material-symbols-outlined" style="font-size:16px">add</span>
+              Add Account
+            </button>
+          </div>
+          <div style="display:grid;gap:1rem">
+            <div class="card" style="padding:0;overflow:hidden">
+              <div class="account-row ripple-container" id="acc1">
+                <div class="stat-icon" style="background:rgba(0,102,255,0.08);margin:0">
+                  <span class="material-symbols-outlined" style="color:var(--primary)">savings</span>
+                </div>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.9rem">Primary Savings</div>
+                  <div style="font-size:0.72rem;color:var(--text-3)">Acct •••• 4242 · HDFC Bank</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="outfit" style="font-weight:800;font-size:1.1rem" id="accSavingsBalance">₹0</div>
+                  <div class="badge-green" style="font-size:0.65rem;display:inline-flex;margin-top:4px">Active</div>
+                </div>
+              </div>
+              <div class="account-row ripple-container" id="acc2" style="border-top:1px solid var(--border)">
+                <div class="stat-icon" style="background:#ecfdf5;margin:0">
+                  <span class="material-symbols-outlined" style="color:var(--emerald)">account_balance</span>
+                </div>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.9rem">Current Account</div>
+                  <div style="font-size:0.72rem;color:var(--text-3)">Acct •••• 8891 · SBI Bank</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="outfit" style="font-weight:800;font-size:1.1rem">₹48,200</div>
+                  <div class="badge-green" style="font-size:0.65rem;display:inline-flex;margin-top:4px">Active</div>
+                </div>
+              </div>
+              <div class="account-row ripple-container" id="acc3" style="border-top:1px solid var(--border)">
+                <div class="stat-icon" style="background:#fff7ed;margin:0">
+                  <span class="material-symbols-outlined" style="color:var(--amber)">monitoring</span>
+                </div>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:0.9rem">Investment Portfolio</div>
+                  <div style="font-size:0.72rem;color:var(--text-3)">Zerodha Demat · Linked</div>
+                </div>
+                <div style="text-align:right">
+                  <div class="outfit" style="font-weight:800;font-size:1.1rem" id="accInvestBalance">₹0</div>
+                  <div style="font-size:0.65rem;color:var(--amber);font-weight:700;margin-top:4px">+12.5%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ TRANSACTIONS PAGE ═══════════════ -->
+        <div class="page" id="page-transactions">
+          <div class="section-header" style="margin-bottom:1.25rem">
+            <div class="section-title outfit" style="font-size:1.5rem">All Transactions</div>
+            <div style="display:flex;gap:0.5rem">
+              <button class="btn-secondary ripple-container" style="width:auto;padding:0.5rem 1rem;font-size:0.78rem"
+                id="filterBtn">
+                <span class="material-symbols-outlined" style="font-size:16px">filter_list</span>
+                Filter
+              </button>
+              <button class="btn-secondary ripple-container" style="width:auto;padding:0.5rem 1rem;font-size:0.78rem"
+                id="exportBtn">
+                <span class="material-symbols-outlined" style="font-size:16px">download</span>
+                Export
+              </button>
+            </div>
+          </div>
+          <div class="card" style="padding:0;overflow:hidden">
+            <div id="allTxList" style="padding:0.75rem"></div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ ANALYTICS PAGE ═══════════════ -->
+        <div class="page" id="page-analytics">
+          <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Analytics</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem">
+            <div class="card">
+              <div class="section-header">
+                <div class="section-title">Monthly Spending</div>
+                <select class="form-select" style="width:auto;padding:0.3rem 0.75rem;font-size:0.75rem"
+                  id="analyticsYearSel">
+                  <option>2025</option>
+                  <option selected>2026</option>
+                </select>
+              </div>
+              <div class="bar-chart" id="barChart"></div>
+              <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.5rem" id="barLabels"></div>
+            </div>
+            <div class="card">
+              <div class="section-title" style="margin-bottom:1rem">Income vs Expenses</div>
+              <div style="display:flex;flex-direction:column;gap:1rem">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                    <span style="font-weight:600">Income</span><span class="outfit"
+                      style="font-weight:700;color:var(--emerald)" id="analyticsIncome">₹0</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                    <div
+                      style="height:100%;width:70%;background:var(--emerald);border-radius:99px;transition:width 1s var(--transition-smooth)">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                    <span style="font-weight:600">Expenses</span><span class="outfit"
+                      style="font-weight:700;color:var(--rose)" id="analyticsExpenses">₹0</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                    <div
+                      style="height:100%;width:30%;background:var(--rose);border-radius:99px;transition:width 1s var(--transition-smooth)">
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:0.4rem">
+                    <span style="font-weight:600">Savings Rate</span><span class="outfit"
+                      style="font-weight:700;color:var(--primary)">56.6%</span>
+                  </div>
+                  <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                    <div
+                      style="height:100%;width:56.6%;background:var(--primary);border-radius:99px;transition:width 1s var(--transition-smooth)">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card" style="grid-column:span 2">
+              <div class="section-title" style="margin-bottom:1rem">Top Spending Categories</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.75rem" id="categoryCards"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ CARDS PAGE ═══════════════ -->
+        <div class="page" id="page-cards">
+          <div class="section-header" style="margin-bottom:1.25rem">
+            <div class="section-title outfit" style="font-size:1.5rem">My Cards</div>
+            <button class="btn-primary ripple-container" style="width:auto;padding:0.6rem 1.2rem;font-size:0.8rem"
+              id="applyCardBtn">
+              <span class="material-symbols-outlined" style="font-size:16px">add</span>
+              Apply for Card
+            </button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div>
+              <div class="credit-card-display" id="visaCard">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:1.1rem;opacity:0.9">ACE
+                    Platinum</span>
+                  <span class="material-symbols-outlined" style="font-size:28px;opacity:0.7">contactless</span>
+                </div>
+                <div
+                  style="font-size:1.25rem;letter-spacing:0.2em;font-family:'Outfit',sans-serif;font-weight:600;opacity:0.95">
+                  4242 •••• •••• 4242</div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-end">
+                  <div>
+                    <div style="font-size:0.6rem;opacity:0.5;text-transform:uppercase;letter-spacing:0.1em">Card Holder
+                    </div>
+                    <div style="font-weight:700;font-size:0.85rem" id="cardHolderName"></div>
+                  </div>
+                  <div style="text-align:right">
+                    <div style="font-size:0.6rem;opacity:0.5;text-transform:uppercase;letter-spacing:0.1em">Expires
+                    </div>
+                    <div style="font-weight:700;font-size:0.85rem">09/28</div>
+                  </div>
+                  <svg width="42" height="28" viewBox="0 0 42 28" style="opacity:0.9">
+                    <circle cx="14" cy="14" r="14" fill="#eb001b" fill-opacity="0.8" />
+                    <circle cx="28" cy="14" r="14" fill="#f79e1b" fill-opacity="0.8" />
+                  </svg>
+                </div>
+              </div>
+              <div style="display:flex;gap:0.75rem;margin-top:1rem">
+                <button class="btn-secondary ripple-container" style="flex:1;font-size:0.78rem;padding:0.6rem"
+                  id="freezeCardBtn">
+                  <span class="material-symbols-outlined" style="font-size:16px">ac_unit</span>
+                  Freeze Card
+                </button>
+                <button class="btn-secondary ripple-container" style="flex:1;font-size:0.78rem;padding:0.6rem"
+                  id="cardDetailsBtn">
+                  <span class="material-symbols-outlined" style="font-size:16px">visibility</span>
+                  View Details
+                </button>
+              </div>
+            </div>
+            <div class="card">
+              <div class="section-title" style="margin-bottom:1rem">Card Spend This Month</div>
+              <div style="display:flex;flex-direction:column;gap:0.875rem">
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:0.8rem;color:var(--text-2)">Limit</span>
+                  <span class="outfit" style="font-weight:700">₹2,00,000</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                  <span style="font-size:0.8rem;color:var(--text-2)">Used</span>
+                  <span class="outfit" style="font-weight:700;color:var(--rose)">₹94,789</span>
+                </div>
+                <div style="height:8px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+                  <div
+                    style="height:100%;width:47.4%;background:linear-gradient(90deg,var(--primary),var(--rose));border-radius:99px">
+                  </div>
+                </div>
+                <div style="font-size:0.72rem;color:var(--text-3)">47.4% of limit used</div>
+                <hr style="border:none;border-top:1px solid var(--border);margin:0.25rem 0" />
+                <div style="display:flex;flex-direction:column;gap:0.5rem">
+                  <div class="tx-item ripple-container" style="padding:0.6rem 0.5rem">
+                    <div class="tx-icon" style="width:34px;height:34px"><span class="material-symbols-outlined"
+                        style="font-size:17px">shopping_bag</span></div>
+                    <div class="tx-info">
+                      <div class="tx-name" style="font-size:0.8rem">Apple Store</div>
+                      <div class="tx-meta">Feb 24</div>
+                    </div>
+                    <div class="tx-amount debit" style="font-size:0.82rem">- ₹89,900</div>
+                  </div>
+                  <div class="tx-item ripple-container" style="padding:0.6rem 0.5rem">
+                    <div class="tx-icon" style="width:34px;height:34px"><span class="material-symbols-outlined"
+                        style="font-size:17px">restaurant</span></div>
+                    <div class="tx-info">
+                      <div class="tx-name" style="font-size:0.8rem">The Table</div>
+                      <div class="tx-meta">Feb 20</div>
+                    </div>
+                    <div class="tx-amount debit" style="font-size:0.82rem">- ₹4,240</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ SETTINGS PAGE ═══════════════ -->
+        <div class="page" id="page-settings">
+          <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Settings</div>
+          <div class="card" style="max-width:600px">
+            <div
+              style="font-weight:700;font-size:0.85rem;margin-bottom:1rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em">
+              Notifications</div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:600;font-size:0.875rem">Transaction Alerts</div>
+                <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Get notified for every transaction
+                </div>
+              </div>
+              <button class="toggle on" data-setting="txalert"></button>
+            </div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:600;font-size:0.875rem">Payment Reminders</div>
+                <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Remind me of upcoming bill payments
+                </div>
+              </div>
+              <button class="toggle on" data-setting="reminders"></button>
+            </div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:600;font-size:0.875rem">Marketing Emails</div>
+                <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Receive offers and promotions</div>
+              </div>
+              <button class="toggle" data-setting="marketing"></button>
+            </div>
+            <div
+              style="font-weight:700;font-size:0.85rem;margin:1.5rem 0 1rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.06em">
+              Security</div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:600;font-size:0.875rem">Two-Factor Authentication</div>
+                <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Secure your account with 2FA</div>
+              </div>
+              <button class="toggle on" data-setting="2fa"></button>
+            </div>
+            <div class="setting-row">
+              <div>
+                <div style="font-weight:600;font-size:0.875rem">Biometric Login</div>
+                <div style="font-size:0.72rem;color:var(--text-3);margin-top:2px">Use fingerprint or face ID</div>
+              </div>
+              <button class="toggle" data-setting="biometric"></button>
+            </div>
+            <div style="margin-top:1.5rem;display:flex;gap:0.75rem">
+              <button class="btn-primary ripple-container" style="width:auto;padding:0.65rem 1.5rem;font-size:0.82rem"
+                id="saveSettingsBtn">Save Changes</button>
+              <button class="btn-secondary ripple-container" style="width:auto;padding:0.65rem 1.5rem;font-size:0.82rem"
+                id="resetSettingsBtn">Reset</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ═══════════════ SUPPORT PAGE ═══════════════ -->
+        <div class="page" id="page-support">
+          <div class="section-title outfit" style="font-size:1.5rem;margin-bottom:1.25rem">Support Center</div>
+          <div style="max-width:600px">
+            <div class="support-card ripple-container" id="chatSupportBtn">
+              <div class="stat-icon" style="background:rgba(0,102,255,0.08);margin:0;flex-shrink:0">
+                <span class="material-symbols-outlined" style="color:var(--primary)">chat</span>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem">Live Chat Support</div>
+                <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Chat with our agents — Available 24/7
+                </div>
+              </div>
+              <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+            </div>
+            <div class="support-card ripple-container" id="callSupportBtn">
+              <div class="stat-icon" style="background:#ecfdf5;margin:0;flex-shrink:0">
+                <span class="material-symbols-outlined" style="color:var(--emerald)">phone_in_talk</span>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem">Call Support</div>
+                <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">+91 1800-XXX-XXXX · Mon–Fri 9AM–6PM
+                </div>
+              </div>
+              <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+            </div>
+            <div class="support-card ripple-container" id="faqBtn">
+              <div class="stat-icon" style="background:#fff7ed;margin:0;flex-shrink:0">
+                <span class="material-symbols-outlined" style="color:var(--amber)">help</span>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem">FAQ & Knowledge Base</div>
+                <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Browse 200+ articles and guides</div>
+              </div>
+              <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+            </div>
+            <div class="support-card ripple-container" id="ticketBtn">
+              <div class="stat-icon" style="background:#fdf2f8;margin:0;flex-shrink:0">
+                <span class="material-symbols-outlined" style="color:#a855f7">confirmation_number</span>
+              </div>
+              <div>
+                <div style="font-weight:700;font-size:0.9rem">Submit a Ticket</div>
+                <div style="font-size:0.75rem;color:var(--text-3);margin-top:2px">Get help for complex issues in 24h
+                </div>
+              </div>
+              <span class="material-symbols-outlined" style="margin-left:auto;color:var(--text-3)">chevron_right</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /content -->
+    </main>
+  </div>
+
+  <!-- ─────────── NOTIFICATIONS PANEL ─────────── -->
+  <div class="notif-panel" id="notifPanel">
+    <div class="notif-panel-header">
+      <span class="notif-panel-title">Notifications</span>
+      <button class="mark-all-btn" id="markAllBtn">Mark all read</button>
+    </div>
+    <div class="notif-list" id="notifList"></div>
+  </div>
+
+  <!-- ─────────── MODAL: TRANSFER ─────────── -->
+  <div class="modal-overlay" id="transferModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Transfer Money</span>
+        <button class="modal-close" data-modal="transferModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Recipient Name / UPI ID</label>
+        <input class="form-input" id="tfRecipient" placeholder="name@upi or +91XXXXXXXXXX" type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount (₹)</label>
+        <input class="form-input" id="tfAmount" placeholder="0.00" type="number" min="1" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Note (optional)</label>
+        <input class="form-input" id="tfNote" placeholder="Add a note..." type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">From Account</label>
+        <select class="form-select" id="tfFrom">
+          <option>Primary Savings •••• 4242</option>
+          <option>Current Account •••• 8891</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="transferModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmTransferBtn">
+          <span class="material-symbols-outlined">send</span> Transfer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: ADD FUNDS ─────────── -->
+  <div class="modal-overlay" id="addFundsModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Add Funds</span>
+        <button class="modal-close" data-modal="addFundsModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount (₹)</label>
+        <input class="form-input" id="afAmount" placeholder="0.00" type="number" min="1" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Method</label>
+        <select class="form-select" id="afMethod">
+          <option>UPI</option>
+          <option>Net Banking</option>
+          <option>Debit Card</option>
+          <option>NEFT/RTGS</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">To Account</label>
+        <select class="form-select">
+          <option>Primary Savings •••• 4242</option>
+          <option>Current Account •••• 8891</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="addFundsModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmAddFundsBtn">
+          <span class="material-symbols-outlined">add_card</span> Add Funds
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: NEW PAYMENT ─────────── -->
+  <div class="modal-overlay" id="newPaymentModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">New Payment</span>
+        <button class="modal-close" data-modal="newPaymentModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payment Type</label>
+        <select class="form-select" id="npType">
+          <option>Bill Payment</option>
+          <option>Transfer</option>
+          <option>Subscription</option>
+          <option>Loan EMI</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Payee / Biller</label>
+        <input class="form-input" id="npPayee" placeholder="Enter payee name..." type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount (₹)</label>
+        <input class="form-input" id="npAmount" placeholder="0.00" type="number" min="1" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Schedule</label>
+        <select class="form-select" id="npSchedule">
+          <option>Pay Now</option>
+          <option>Tomorrow</option>
+          <option>This Weekend</option>
+          <option>Choose Date</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="newPaymentModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmPaymentBtn">
+          <span class="material-symbols-outlined">payments</span> Pay Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: ADD ACCOUNT ─────────── -->
+  <div class="modal-overlay" id="addAccountModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Link New Account</span>
+        <button class="modal-close" data-modal="addAccountModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bank Name</label>
+        <input class="form-input" id="aaBank" placeholder="e.g. HDFC, ICICI, Axis..." type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Account Number</label>
+        <input class="form-input" id="aaAccNum" placeholder="Enter account number" type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">IFSC Code</label>
+        <input class="form-input" id="aaIFSC" placeholder="e.g. HDFC0001234" type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Account Type</label>
+        <select class="form-select">
+          <option>Savings</option>
+          <option>Current</option>
+          <option>Salary</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="addAccountModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmAddAccountBtn">
+          <span class="material-symbols-outlined">link</span> Link Account
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: SCAN & PAY ─────────── -->
+  <div class="modal-overlay" id="scanPayModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Scan & Pay</span>
+        <button class="modal-close" data-modal="scanPayModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div style="text-align:center;padding:1.5rem 0">
+        <div
+          style="width:160px;height:160px;background:#f8fafc;border-radius:1rem;margin:0 auto;display:flex;align-items:center;justify-content:center;border:2px dashed var(--border)">
+          <span class="material-symbols-outlined" style="font-size:64px;color:var(--text-3)">qr_code_2</span>
+        </div>
+        <p style="font-size:0.82rem;color:var(--text-3);margin-top:1rem">Camera access required to scan QR code</p>
+        <p style="font-size:0.75rem;color:var(--text-3)">— or enter UPI ID manually —</p>
+      </div>
+      <div class="form-group">
+        <label class="form-label">UPI ID</label>
+        <input class="form-input" id="spUPI" placeholder="name@upi" type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Amount (₹)</label>
+        <input class="form-input" id="spAmount" placeholder="0.00" type="number" min="1" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="scanPayModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmScanPayBtn">
+          <span class="material-symbols-outlined">qr_code_scanner</span> Pay
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: APPLY CARD ─────────── -->
+  <div class="modal-overlay" id="applyCardModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Apply for New Card</span>
+        <button class="modal-close" data-modal="applyCardModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Card Type</label>
+        <select class="form-select">
+          <option>ACE Platinum Credit Card</option>
+          <option>ACE Gold Debit Card</option>
+          <option>ACE Rewards Credit Card</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Annual Income (₹)</label>
+        <input class="form-input" placeholder="Enter annual income" type="number" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Employment Type</label>
+        <select class="form-select">
+          <option>Salaried</option>
+          <option>Self-Employed</option>
+          <option>Business Owner</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="applyCardModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmApplyCardBtn">
+          <span class="material-symbols-outlined">credit_card</span> Apply Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── MODAL: SUBMIT TICKET ─────────── -->
+  <div class="modal-overlay" id="ticketModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title">Submit Support Ticket</span>
+        <button class="modal-close" data-modal="ticketModal">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Issue Category</label>
+        <select class="form-select">
+          <option>Transaction Issue</option>
+          <option>Card Problem</option>
+          <option>Login / Access</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <input class="form-input" placeholder="Brief description of the issue" type="text" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-input" placeholder="Describe the issue in detail..." rows="4"
+          style="resize:vertical"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary ripple-container" data-modal="ticketModal">Cancel</button>
+        <button class="btn-primary ripple-container" id="confirmTicketBtn">
+          <span class="material-symbols-outlined">confirmation_number</span> Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── TOAST CONTAINER ─────────── -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/ace-db.js?v=2"></script>
+  <script>
+    /* ═══════════════════════════════════════════════════
+       SAL — State / Action / Logic
+       Central state machine for the ACE Bank dashboard
+    ══════════════════════════════════════════════════ */
+
+    // ──────────── STATE ────────────
+    const SAL = {
+      state: {
+        balance: 0,
+        currentPage: 'dashboard',
+        notifOpen: false,
+        unreadNotifs: 1,
+        cardFrozen: false,
+        notifications: [
+          { id: 1, text: 'Welcome to ACE Bank! Your account is ready.', time: 'Just now', unread: true },
+        ],
+        transactions: [],
+        settings: { txalert: true, reminders: true, marketing: false, '2fa': true, biometric: false }
+      },
+
+      // ──────────── ACTIONS ────────────
+      actions: {
+        navigateTo(page) {
+          SAL.state.currentPage = page;
+          document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+          document.getElementById(`page-${page}`)?.classList.add('active');
+          document.querySelectorAll('.nav-item').forEach(n => {
+            n.classList.toggle('active', n.dataset.page === page);
+          });
+        },
+
+        openModal(id) {
+          document.getElementById(id)?.classList.add('open');
+        },
+
+        closeModal(id) {
+          document.getElementById(id)?.classList.remove('open');
+        },
+
+        toggleNotifPanel() {
+          SAL.state.notifOpen = !SAL.state.notifOpen;
+          document.getElementById('notifPanel').classList.toggle('open', SAL.state.notifOpen);
+        },
+
+        markAllRead() {
+          SAL.state.notifications.forEach(n => n.unread = false);
+          SAL.state.unreadNotifs = 0;
+          SAL.logic.renderNotifications();
+          document.getElementById('notifDot').style.display = 'none';
+          SAL.logic.toast('All notifications marked as read', 'info');
+        },
+
+        transfer(recipient, amount, note) {
+          if (!recipient || !amount || amount <= 0) {
+            SAL.logic.toast('Please fill all required fields', 'error'); return;
+          }
+          if (amount > SAL.state.balance) {
+            SAL.logic.toast('Insufficient balance', 'error'); return;
+          }
+          const session = DB.getCurrentSession();
+          SAL.state.balance -= parseFloat(amount);
+          SAL.state.transactions.unshift({
+            icon: 'send',
+            name: `Transfer to ${recipient}`,
+            cat: 'Transfer',
+            date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+            amount: -parseFloat(amount),
+            type: 'debit'
+          });
+          SAL.logic.updateBalance();
+          SAL.logic.renderTransactions();
+          SAL.actions.closeModal('transferModal');
+          SAL.logic.toast(`\u20b9${parseFloat(amount).toLocaleString('en-IN')} sent to ${recipient}`, 'success');
+          if (session) DB.updateBalance(session.accountNumber, parseFloat(amount), 'debit');
+        },
+
+        addFunds(amount, method) {
+          if (!amount || amount <= 0) {
+            SAL.logic.toast('Enter a valid amount', 'error'); return;
+          }
+          const session = DB.getCurrentSession();
+          SAL.state.balance += parseFloat(amount);
+          SAL.state.transactions.unshift({
+            icon: 'add_card',
+            name: `Funds added via ${method}`,
+            cat: 'Credit',
+            date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+            amount: parseFloat(amount),
+            type: 'credit'
+          });
+          SAL.logic.updateBalance();
+          SAL.logic.renderTransactions();
+          SAL.actions.closeModal('addFundsModal');
+          SAL.logic.toast(`\u20b9${parseFloat(amount).toLocaleString('en-IN')} added to your account`, 'success');
+          if (session) DB.updateBalance(session.accountNumber, parseFloat(amount), 'credit');
+        },
+
+        newPayment(payee, amount, type) {
+          if (!payee || !amount || amount <= 0) {
+            SAL.logic.toast('Please fill all required fields', 'error'); return;
+          }
+          const session = DB.getCurrentSession();
+          SAL.state.balance -= parseFloat(amount);
+          SAL.state.transactions.unshift({
+            icon: 'payments',
+            name: `${type}: ${payee}`,
+            cat: type,
+            date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+            amount: -parseFloat(amount),
+            type: 'debit'
+          });
+          SAL.logic.updateBalance();
+          SAL.logic.renderTransactions();
+          SAL.actions.closeModal('newPaymentModal');
+          SAL.logic.toast(`Payment of \u20b9${parseFloat(amount).toLocaleString('en-IN')} to ${payee} successful`, 'success');
+          if (session) DB.updateBalance(session.accountNumber, parseFloat(amount), 'debit');
+        },
+
+        toggleCard() {
+          SAL.state.cardFrozen = !SAL.state.cardFrozen;
+          const btn = document.getElementById('freezeCardBtn');
+          const card = document.getElementById('visaCard');
+          if (SAL.state.cardFrozen) {
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px">whatshot</span> Unfreeze Card';
+            card.style.filter = 'grayscale(0.8) brightness(0.7)';
+            SAL.logic.toast('Card frozen successfully. It cannot be used for transactions.', 'warn');
+          } else {
+            btn.innerHTML = '<span class="material-symbols-outlined" style="font-size:16px">ac_unit</span> Freeze Card';
+            card.style.filter = '';
+            SAL.logic.toast('Card unfrozen. Your card is now active.', 'success');
+          }
+        },
+
+        toggleSetting(key) {
+          SAL.state.settings[key] = !SAL.state.settings[key];
+        },
+
+        logout() {
+          SAL.logic.toast('Signing out... See you soon!', 'info');
+          setTimeout(() => {
+            document.querySelector('.layout').style.opacity = '0';
+            document.querySelector('.layout').style.transition = 'opacity 0.5s';
+            DB.logout();
+            setTimeout(() => { window.location.href = 'index.jsp'; }, 600);
+          }, 600);
+        }
+      },
+
+      // ──────────── LOGIC ────────────
+      logic: {
+        toast(message, type = 'success') {
+          const icons = { success: 'check_circle', error: 'error', info: 'info', warn: 'warning' };
+          const el = document.createElement('div');
+          el.className = `toast ${type === 'success' ? '' : type}`;
+          el.innerHTML = `
+        <div class="toast-icon"><span class="material-symbols-outlined">${icons[type]}</span></div>
+        <span class="toast-text">${message}</span>
+      `;
+          document.getElementById('toastContainer').appendChild(el);
+          requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
+          setTimeout(() => {
+            el.classList.remove('show');
+            setTimeout(() => el.remove(), 400);
+          }, 3500);
+        },
+
+        updateBalance() {
+          const el = document.getElementById('heroBalance');
+          if (!el) return;
+          const formatted = '₹' + SAL.state.balance.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          el.textContent = formatted;
+          el.style.transform = 'scale(1.02)';
+          setTimeout(() => { el.style.transform = ''; el.style.transition = 'transform 0.3s'; }, 200);
+        },
+
+        renderTransactions() {
+          const recent = SAL.state.transactions.slice(0, 5);
+          const all = SAL.state.transactions;
+
+          const buildItem = (tx) => `
+        <div class="tx-item ripple-container">
+          <div class="tx-icon"><span class="material-symbols-outlined">${tx.icon}</span></div>
+          <div class="tx-info">
+            <div class="tx-name">${tx.name}</div>
+            <div class="tx-meta">${tx.cat} · ${tx.date}</div>
+          </div>
+          <div class="tx-amount ${tx.type}">
+            ${tx.type === 'credit' ? '+' : '-'} ₹${Math.abs(tx.amount).toLocaleString('en-IN')}
+          </div>
+        </div>
+      `;
+
+          const txList = document.getElementById('txList');
+          if (txList) txList.innerHTML = recent.map(buildItem).join('');
+
+          const allTxList = document.getElementById('allTxList');
+          if (allTxList) allTxList.innerHTML = all.map(buildItem).join('');
+        },
+
+        renderNotifications() {
+          const list = document.getElementById('notifList');
+          if (!list) return;
+          list.innerHTML = SAL.state.notifications.map(n => `
+        <div class="notif-item ${n.unread ? 'unread' : ''}" data-id="${n.id}">
+          ${n.unread ? '<div class="notif-dot-indicator"></div>' : '<div style="width:8px;flex-shrink:0"></div>'}
+          <div>
+            <div class="notif-content-text">${n.text}</div>
+            <div class="notif-time">${n.time}</div>
+          </div>
+        </div>
+      `).join('');
+
+          // Clicking a notif marks it read
+          list.querySelectorAll('.notif-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const id = parseInt(item.dataset.id);
+              const notif = SAL.state.notifications.find(n => n.id === id);
+              if (notif && notif.unread) {
+                notif.unread = false;
+                SAL.state.unreadNotifs = Math.max(0, SAL.state.unreadNotifs - 1);
+                if (SAL.state.unreadNotifs === 0) document.getElementById('notifDot').style.display = 'none';
+                SAL.logic.renderNotifications();
+              }
+            });
+          });
+        },
+
+        renderBarChart() {
+          const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'];
+          const values = [16200, 19800, 24000, 18240, 15600, 12800];
+          const max = Math.max(...values.filter(v => v > 0));
+
+          const chart = document.getElementById('barChart');
+          if (!chart) return;
+          chart.innerHTML = values.map((v, i) => `
+        <div class="bar-col">
+          <div class="bar ${v === Math.max(...values.filter(v => v > 0)) ? 'active-bar' : ''}" 
+               style="height:${v > 0 ? (v / max) * 100 : 8}px;${v === 0 ? 'opacity:0.06' : ''}"
+               title="₹${v.toLocaleString('en-IN')} in ${months[i]}">
+          </div>
+          <div class="bar-label">${months[i].slice(0, 3)}</div>
+        </div>
+      `).join('');
+
+          chart.querySelectorAll('.bar').forEach(bar => {
+            bar.addEventListener('click', () => {
+              chart.querySelectorAll('.bar').forEach(b => b.classList.remove('active-bar'));
+              bar.classList.add('active-bar');
+              SAL.logic.toast(`Selected: ${bar.title}`, 'info');
+            });
+          });
+        },
+
+        renderCategoryCards() {
+          const cats = [
+            { icon: 'devices', label: 'Technology', pct: 60, color: 'var(--primary)', bg: 'rgba(0,102,255,0.08)' },
+            { icon: 'restaurant', label: 'Food', pct: 25, color: 'var(--emerald)', bg: '#ecfdf5' },
+            { icon: 'subscriptions', label: 'Lifestyle', pct: 15, color: '#a855f7', bg: '#fdf2f8' },
+            { icon: 'directions_car', label: 'Transport', pct: 8, color: 'var(--amber)', bg: '#fff7ed' },
+          ];
+          const el = document.getElementById('categoryCards');
+          if (!el) return;
+          el.innerHTML = cats.map(c => `
+        <div class="stat-card" style="cursor:default">
+          <div class="stat-icon" style="background:${c.bg};margin-bottom:0.75rem">
+            <span class="material-symbols-outlined" style="color:${c.color}">${c.icon}</span>
+          </div>
+          <div class="stat-label">${c.label}</div>
+          <div class="stat-value outfit" style="font-size:1.1rem;color:${c.color}">${c.pct}%</div>
+          <div style="margin-top:0.5rem;height:4px;background:#f1f5f9;border-radius:99px;overflow:hidden">
+            <div style="height:100%;width:${c.pct}%;background:${c.color};border-radius:99px"></div>
+          </div>
+        </div>
+      `).join('');
+        },
+
+        addRipple(el, e) {
+          const rect = el.getBoundingClientRect();
+          const ripple = document.createElement('div');
+          const size = Math.max(rect.width, rect.height);
+          ripple.className = 'ripple-effect';
+          ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`;
+          el.appendChild(ripple);
+          ripple.addEventListener('animationend', () => ripple.remove());
+        },
+
+        init() {
+          // ── Auth Guard ──
+          if (!DB.isLoggedIn()) {
+            window.location.href = 'login.jsp';
+            return;
+          }
+
+          // ── Personalize with session data ──
+          const session = DB.getCurrentSession();
+          if (session) {
+            const nameEl = document.querySelector('.user-name');
+            if (nameEl) nameEl.textContent = session.firstName + (session.lastName ? ' ' + session.lastName : '');
+            const initials = (session.firstName?.[0] || '') + (session.lastName?.[0] || '');
+            const avatarEl = document.querySelector('.user-avatar');
+            if (avatarEl) avatarEl.textContent = initials.toUpperCase();
+
+            // Set balance from session (from DB)
+            SAL.state.balance = parseFloat(session.balance) || 0;
+            this.updateBalance();
+
+            // Update account page balance
+            const fmt = (v) => '₹' + v.toLocaleString('en-IN');
+            const accEl = document.getElementById('accSavingsBalance');
+            if (accEl) accEl.textContent = fmt(SAL.state.balance);
+
+            // Update account tag with account number
+            const accTag = document.querySelector('.account-tag');
+            if (accTag && session.accountNumber) accTag.textContent = 'Primary Savings •••• ' + String(session.accountNumber).slice(-4);
+
+            // Update card holder name
+            const cardHolder = document.getElementById('cardHolderName');
+            if (cardHolder) cardHolder.textContent = session.firstName + (session.lastName ? ' ' + session.lastName : '');
+          }
+
+          // Render initial data
+          this.renderTransactions();
+          this.renderNotifications();
+          this.renderBarChart();
+          this.renderCategoryCards();
+
+          // ── Navigation ──
+          document.querySelectorAll('[data-page]').forEach(item => {
+            item.addEventListener('click', () => SAL.actions.navigateTo(item.dataset.page));
+          });
+
+          // ── Ripple effects ──
+          document.querySelectorAll('.ripple-container').forEach(el => {
+            el.addEventListener('click', (e) => SAL.logic.addRipple(el, e));
+          });
+
+          // ── Close modals ──
+          document.querySelectorAll('.modal-close, [data-modal]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const id = btn.dataset.modal;
+              if (id) SAL.actions.closeModal(id);
+            });
+          });
+
+          document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+              if (e.target === overlay) SAL.actions.closeModal(overlay.id);
+            });
+          });
+
+          // ── Header buttons ──
+          document.getElementById('notifBtn').addEventListener('click', () => SAL.actions.toggleNotifPanel());
+          document.getElementById('markAllBtn').addEventListener('click', () => SAL.actions.markAllRead());
+          document.getElementById('newPaymentBtn').addEventListener('click', () => SAL.actions.openModal('newPaymentModal'));
+          document.getElementById('logoutBtn').addEventListener('click', () => SAL.actions.logout());
+
+          // ── Theme toggle ──
+          let dark = false;
+          document.getElementById('themeBtn').addEventListener('click', () => {
+            dark = !dark;
+            if (dark) {
+              document.documentElement.style.setProperty('--bg-main', '#0f172a');
+              document.documentElement.style.setProperty('--surface', '#1e293b');
+              document.documentElement.style.setProperty('--border', 'rgba(255,255,255,0.06)');
+              document.documentElement.style.setProperty('--text-1', '#f1f5f9');
+              document.documentElement.style.setProperty('--text-2', '#94a3b8');
+              document.documentElement.style.setProperty('--bg-dark', '#020617');
+              document.getElementById('themeBtn').querySelector('.material-symbols-outlined').textContent = 'light_mode';
+              document.querySelectorAll('.card,.stat-card,.quick-btn,.support-card,.balance-hero,.icon-btn').forEach(el => el.style.background = '#1e293b');
+              SAL.logic.toast('Dark mode enabled', 'info');
+            } else {
+              document.documentElement.style.setProperty('--bg-main', '#f0f2f7');
+              document.documentElement.style.setProperty('--border', 'rgba(0,0,0,0.07)');
+              document.documentElement.style.setProperty('--text-1', '#0f172a');
+              document.documentElement.style.setProperty('--text-2', '#64748b');
+              document.documentElement.style.setProperty('--bg-dark', '#08080f');
+              document.getElementById('themeBtn').querySelector('.material-symbols-outlined').textContent = 'dark_mode';
+              document.querySelectorAll('.card,.stat-card,.quick-btn,.support-card,.balance-hero,.icon-btn').forEach(el => el.style.background = '');
+              SAL.logic.toast('Light mode enabled', 'info');
+            }
+          });
+
+          // ── Search ──
+          document.getElementById('searchInput').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            if (!q) return;
+            const matches = SAL.state.transactions.filter(t =>
+              t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q)
+            );
+            if (matches.length > 0) {
+              SAL.logic.toast(`${matches.length} result(s) found for "${q}"`, 'info');
+            }
+          });
+
+          // ── Dashboard: Transfer ──
+          document.getElementById('transferBtn').addEventListener('click', () => SAL.actions.openModal('transferModal'));
+          document.getElementById('addFundsBtn').addEventListener('click', () => SAL.actions.openModal('addFundsModal'));
+
+          document.getElementById('confirmTransferBtn').addEventListener('click', () => {
+            SAL.actions.transfer(
+              document.getElementById('tfRecipient').value,
+              document.getElementById('tfAmount').value,
+              document.getElementById('tfNote').value
+            );
+            document.getElementById('tfRecipient').value = '';
+            document.getElementById('tfAmount').value = '';
+            document.getElementById('tfNote').value = '';
+          });
+
+          document.getElementById('confirmAddFundsBtn').addEventListener('click', () => {
+            SAL.actions.addFunds(
+              document.getElementById('afAmount').value,
+              document.getElementById('afMethod').value
+            );
+            document.getElementById('afAmount').value = '';
+          });
+
+          // ── New Payment ──
+          document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
+            SAL.actions.newPayment(
+              document.getElementById('npPayee').value,
+              document.getElementById('npAmount').value,
+              document.getElementById('npType').value
+            );
+            document.getElementById('npPayee').value = '';
+            document.getElementById('npAmount').value = '';
+          });
+
+          // ── Quick Actions ──
+          document.getElementById('quickSend').addEventListener('click', () => SAL.actions.openModal('transferModal'));
+          document.getElementById('quickReceive').addEventListener('click', () => SAL.actions.openModal('addFundsModal'));
+          document.getElementById('quickPay').addEventListener('click', () => SAL.actions.openModal('scanPayModal'));
+          document.getElementById('quickBill').addEventListener('click', () => SAL.actions.openModal('newPaymentModal'));
+
+          document.getElementById('confirmScanPayBtn').addEventListener('click', () => {
+            const upi = document.getElementById('spUPI').value;
+            const amt = document.getElementById('spAmount').value;
+            if (!upi || !amt) { SAL.logic.toast('Fill all fields', 'error'); return; }
+            const session = DB.getCurrentSession();
+            SAL.state.balance -= parseFloat(amt);
+            SAL.logic.updateBalance();
+            SAL.actions.closeModal('scanPayModal');
+            SAL.logic.toast(`\u20b9${parseFloat(amt).toLocaleString('en-IN')} paid to ${upi}`, 'success');
+            document.getElementById('spUPI').value = '';
+            document.getElementById('spAmount').value = '';
+            if (session) DB.updateBalance(session.accountNumber, parseFloat(amt), 'debit');
+          });
+
+          // ── View All Transactions ──
+          document.getElementById('viewAllTxBtn').addEventListener('click', () => SAL.actions.navigateTo('transactions'));
+
+          // ── Stat Cards click ──
+          document.getElementById('incomeCard').addEventListener('click', () => {
+            SAL.actions.navigateTo('analytics');
+            SAL.logic.toast('Viewing income analytics', 'info');
+          });
+          document.getElementById('expenseCard').addEventListener('click', () => {
+            SAL.actions.navigateTo('analytics');
+            SAL.logic.toast('Viewing expense analytics', 'info');
+          });
+          document.getElementById('investCard').addEventListener('click', () => {
+            SAL.actions.navigateTo('accounts');
+            SAL.logic.toast('Viewing investment portfolio', 'info');
+          });
+          document.getElementById('creditCard2').addEventListener('click', () => {
+            // Credit score not available for new users
+          });
+
+          // ── Accounts ──
+          document.getElementById('addAccountBtn').addEventListener('click', () => SAL.actions.openModal('addAccountModal'));
+
+          document.getElementById('confirmAddAccountBtn').addEventListener('click', () => {
+            const bank = document.getElementById('aaBank').value;
+            if (!bank) { SAL.logic.toast('Enter bank name', 'error'); return; }
+            SAL.actions.closeModal('addAccountModal');
+            SAL.logic.toast(`${bank} account linked successfully!`, 'success');
+            document.getElementById('aaBank').value = '';
+            document.getElementById('aaAccNum').value = '';
+            document.getElementById('aaIFSC').value = '';
+          });
+
+          ['acc1', 'acc2', 'acc3'].forEach(id => {
+            document.getElementById(id)?.addEventListener('click', () => {
+              SAL.logic.toast('Account details — full statement view coming soon', 'info');
+            });
+          });
+
+          // ── Transactions page buttons ──
+          document.getElementById('filterBtn').addEventListener('click', () => {
+            SAL.logic.toast('Filter panel — coming in next update', 'info');
+          });
+          document.getElementById('exportBtn').addEventListener('click', () => {
+            SAL.logic.toast('Exporting transactions as CSV...', 'info');
+            setTimeout(() => SAL.logic.toast('Transactions exported successfully!', 'success'), 1500);
+          });
+
+          // ── Analytics select ──
+          document.getElementById('analyticsYearSel').addEventListener('change', () => {
+            SAL.logic.renderBarChart();
+            SAL.logic.toast('Chart updated', 'info');
+          });
+
+          // ── Cards ──
+          document.getElementById('applyCardBtn').addEventListener('click', () => SAL.actions.openModal('applyCardModal'));
+          document.getElementById('freezeCardBtn').addEventListener('click', () => SAL.actions.toggleCard());
+          document.getElementById('cardDetailsBtn').addEventListener('click', () => {
+            SAL.logic.toast('Card number: 4242 •••• •••• 4242 · CVV sent to registered email', 'info');
+          });
+          document.getElementById('visaCard').addEventListener('click', () => {
+            SAL.logic.toast('ACE Platinum Card — Tap for contactless payment ready!', 'info');
+          });
+          document.getElementById('confirmApplyCardBtn').addEventListener('click', () => {
+            SAL.actions.closeModal('applyCardModal');
+            SAL.logic.toast('Application submitted! You\'ll hear back in 3-5 business days.', 'success');
+          });
+
+          // ── Settings ──
+          document.querySelectorAll('.toggle').forEach(toggle => {
+            toggle.addEventListener('click', () => {
+              toggle.classList.toggle('on');
+              const key = toggle.dataset.setting;
+              SAL.actions.toggleSetting(key);
+              SAL.logic.toast(`${key} ${SAL.state.settings[key] ? 'enabled' : 'disabled'}`, SAL.state.settings[key] ? 'success' : 'info');
+            });
+          });
+
+          document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+            SAL.logic.toast('Settings saved successfully!', 'success');
+          });
+          document.getElementById('resetSettingsBtn').addEventListener('click', () => {
+            document.querySelectorAll('.toggle').forEach(t => t.classList.remove('on'));
+            ['txalert', 'reminders', '2fa'].forEach(k => document.querySelector(`[data-setting="${k}"]`)?.classList.add('on'));
+            SAL.logic.toast('Settings reset to defaults', 'info');
+          });
+
+          // ── Support ──
+          document.getElementById('chatSupportBtn').addEventListener('click', () => {
+            SAL.logic.toast('Connecting you to a live agent...', 'info');
+            setTimeout(() => SAL.logic.toast('Agent Priya joined the chat!', 'success'), 2000);
+          });
+          document.getElementById('callSupportBtn').addEventListener('click', () => {
+            SAL.logic.toast('Dial 1800-XXX-XXXX — Mon to Fri, 9AM–6PM IST', 'info');
+          });
+          document.getElementById('faqBtn').addEventListener('click', () => {
+            SAL.logic.toast('Opening Knowledge Base...', 'info');
+          });
+          document.getElementById('ticketBtn').addEventListener('click', () => SAL.actions.openModal('ticketModal'));
+          document.getElementById('confirmTicketBtn').addEventListener('click', () => {
+            SAL.actions.closeModal('ticketModal');
+            SAL.logic.toast('Ticket #ACE-2847 submitted. We\'ll respond within 24 hours.', 'success');
+          });
+
+          // ── Spending Legend hover ──
+          document.querySelectorAll('.legend-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const cats = { tech: 'Technology: ₹10,920 (60%)', food: 'Food & Drinks: ₹4,550 (25%)', life: 'Lifestyle: ₹2,730 (15%)' };
+              SAL.logic.toast(cats[item.dataset.cat] || '', 'info');
+            });
+          });
+
+          // ── Escape key closes modals ──
+          document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+              document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open'));
+              if (SAL.state.notifOpen) SAL.actions.toggleNotifPanel();
+            }
+          });
+
+          // ── Welcome toast ──
+          const _s = DB.getCurrentSession();
+          setTimeout(() => SAL.logic.toast('Welcome back, ' + (_s ? _s.firstName : 'User') + '! 👋 Balance updated.', 'success'), 800);
+        }
+      }
+    };
+
+    // Boot
+    document.addEventListener('DOMContentLoaded', () => SAL.logic.init());
+  </script>
+</body>
+
+</html>

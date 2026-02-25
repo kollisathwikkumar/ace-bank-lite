@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ACE BANK | Cards</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { 'ink-100': '#0a0a0f', 'ink-80': '#1c1c24', 'ink-60': '#3a3a48', 'ink-40': '#6b6b7e', 'ink-20': '#9999aa', 'ink-10': '#c8c8d4', 'surface': '#f4f4f6', 'surface-raised': '#efeff2', 'hairline': '#e8e8ed', 'hairline-dark': '#d1d1d8', 'off-white': '#f9f9fb', 'ace-blue': '#0066ff', 'ace-blue-deep': '#0047cc', 'ace-blue-tint': '#f0f5ff', 'dark-base': '#08080f', 'dark-surface': '#111119', 'dark-border': '#1e1e2e', 'success-accent': '#16a34a', 'error-accent': '#cc1111' }, fontFamily: { 'display': ['Outfit', 'sans-serif'], 'body': ['DM Sans', 'sans-serif'], 'mono': ['JetBrains Mono', 'monospace'], 'serif': ['Instrument Serif', 'serif'] }, letterSpacing: { 'tightest': '-0.04em', 'caps': '0.12em' } } } }
+    </script>
+    <style>
+        body {
+            background: #f9f9fb;
+            color: #3a3a48;
+            font-family: 'DM Sans', sans-serif
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d1d8;
+            border-radius: 10px
+        }
+
+        @keyframes enterUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .enter-animation {
+            animation: enterUp .4s cubic-bezier(.16, 1, .3, 1) both
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen">
+    <aside class="w-[220px] bg-dark-base border-r border-dark-border flex flex-col fixed h-full z-50">
+        <div class="h-[56px] flex flex-col justify-center px-6">
+            <div class="flex items-baseline gap-1"><span
+                    class="font-display font-bold text-white text-lg tracking-tight">ACE</span><span
+                    class="font-display font-light text-[10px] tracking-widest text-[#6b6b88] uppercase">Bank</span>
+            </div>
+        </div>
+        <nav class="flex-1 mt-6">
+            <div class="px-6 mb-4"><span
+                    class="text-[10px] font-medium text-[#6b6b88] tracking-caps uppercase">Banking</span></div>
+            <ul class="space-y-1">
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="dashboard.html">Dashboard</a></li>
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="transactions.html">Transactions</a></li>
+                <li class="relative">
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[2px] h-4 bg-ace-blue"></div><a
+                        class="flex items-center px-6 py-2 text-ace-blue text-[13px] font-medium"
+                        href="cards.html">Cards</a>
+                </li>
+            </ul>
+            <div class="px-6 mt-8 mb-4"><span
+                    class="text-[10px] font-medium text-[#6b6b88] tracking-caps uppercase">Wealth</span></div>
+            <ul class="space-y-1">
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="investments.html">Investments</a></li>
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="credit-score.html">Credit Score</a></li>
+            </ul>
+        </nav>
+        <!-- Active Profile Link -->
+        <a href="profile.html"
+            class="block p-6 border-t border-dark-border mt-auto hover:bg-white/5 transition-colors relative cursor-pointer group">
+            <div
+                class="absolute left-0 top-0 w-1 h-full bg-ace-blue opacity-0 group-hover:opacity-100 transition-opacity">
+            </div>
+            <div class="mb-1 text-white font-display text-[13px] font-medium" id="sidebar-user-name">Arjun Mehta</div>
+            <div class="font-mono text-[11px] text-[#6b6b88] mb-2" id="sidebar-account-no">AC: 8842...4521</div>
+            <div class="text-ace-blue text-[12px] font-medium">Profile Settings</div>
+        </a>
+    </aside>
+
+    <main class="flex-1 ml-[220px]">
+        <header
+            class="h-[52px] bg-white/80 backdrop-blur-xl border-b border-hairline sticky top-0 z-40 flex items-center justify-between px-10">
+            <div class="text-ink-20 text-xs">/ CARDS</div>
+            <div class="flex items-center gap-6">
+                <div class="relative w-[320px]"><input
+                        class="w-full bg-surface border-none rounded-full py-1.5 px-10 text-sm focus:ring-2 focus:ring-ace-blue-tint placeholder:text-ink-20"
+                        placeholder="Search..." type="text" />
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2"><svg class="w-3.5 h-3.5 text-ink-20"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" />
+                        </svg></div>
+                </div>
+                <button class="relative p-1"><svg class="w-5 h-5 text-ink-80" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                            stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                    </svg><span
+                        class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-ace-blue rounded-full border border-white"></span></button>
+            </div>
+        </header>
+
+        <div class="max-w-[860px] mx-auto py-12 px-6 enter-animation">
+            <section class="mb-10">
+                <span
+                    class="inline-block px-2 py-0.5 bg-ace-blue-tint text-ace-blue text-[10px] font-bold tracking-widest uppercase rounded-[2px] mb-4">Card
+                    Management</span>
+                <h1 class="font-display text-[36px] font-bold leading-none text-ink-100 tracking-tightest">Your Cards
+                </h1>
+            </section>
+
+            <!-- Card Visuals -->
+            <section class="mb-12">
+                <div class="grid grid-cols-2 gap-6">
+                    <div
+                        class="relative rounded-2xl overflow-hidden h-[220px] bg-gradient-to-br from-[#0a0a0f] via-[#1a1a2e] to-[#16213e] p-6 flex flex-col justify-between shadow-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-[10px] text-[#6b6b88] uppercase tracking-widest font-medium">Debit Card
+                                </div>
+                                <div class="text-white font-display font-semibold text-base mt-1">ACE Platinum</div>
+                            </div><svg class="w-10 h-7" viewBox="0 0 48 32" fill="none">
+                                <circle cx="16" cy="16" r="14" fill="#eb001b" opacity="0.8" />
+                                <circle cx="32" cy="16" r="14" fill="#f79e1b" opacity="0.8" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-white text-lg tracking-[0.2em] mb-3">4521 •••• •••• 8842</div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-[9px] text-[#6b6b88] uppercase tracking-widest">Card Holder</div>
+                                    <div class="text-white text-[13px] font-medium">ARJUN MEHTA</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] text-[#6b6b88] uppercase tracking-widest">Expires</div>
+                                    <div class="text-white text-[13px] font-medium">09/28</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-ace-blue/10 rounded-full blur-3xl"></div>
+                    </div>
+                    <div
+                        class="relative rounded-2xl overflow-hidden h-[220px] bg-gradient-to-br from-ace-blue via-ace-blue-deep to-[#001a66] p-6 flex flex-col justify-between shadow-lg">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="text-[10px] text-blue-200/60 uppercase tracking-widest font-medium">Credit
+                                    Card</div>
+                                <div class="text-white font-display font-semibold text-base mt-1">ACE Signature</div>
+                            </div><svg class="w-10 h-7" viewBox="0 0 48 32" fill="none">
+                                <rect x="2" y="4" width="44" height="24" rx="4" fill="none" stroke="white"
+                                    stroke-opacity="0.3" stroke-width="1.5" />
+                                <rect x="6" y="12" width="12" height="8" rx="1" fill="white" fill-opacity="0.4" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="font-mono text-white text-lg tracking-[0.2em] mb-3">7891 •••• •••• 3456</div>
+                            <div class="flex justify-between items-end">
+                                <div>
+                                    <div class="text-[9px] text-blue-200/60 uppercase tracking-widest">Card Holder</div>
+                                    <div class="text-white text-[13px] font-medium">ARJUN MEHTA</div>
+                                </div>
+                                <div>
+                                    <div class="text-[9px] text-blue-200/60 uppercase tracking-widest">Expires</div>
+                                    <div class="text-white text-[13px] font-medium">03/29</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats -->
+            <section class="mb-12 border-t border-hairline pt-8">
+                <div class="grid grid-cols-4 gap-4">
+                    <div>
+                        <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1">Debit Limit</div>
+                        <div class="font-display text-xl font-semibold text-ink-100">₹ 2,00,000</div>
+                        <div class="text-[11px] text-ink-40 mt-1">Daily transaction</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1">Credit Limit</div>
+                        <div class="font-display text-xl font-semibold text-ink-100">₹ 5,00,000</div>
+                        <div class="text-[11px] text-ace-blue mt-1">₹ 3,42,100 available</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1">Due Amount</div>
+                        <div class="font-display text-xl font-semibold text-error-accent">₹ 1,57,900</div>
+                        <div class="text-[11px] text-ink-40 mt-1">Due on 25 Oct</div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1">Reward Points
+                        </div>
+                        <div class="font-display text-xl font-semibold text-ink-100">12,480</div>
+                        <div class="text-[11px] text-success-accent mt-1">↑ 340 this month</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <section class="mb-12">
+                <h3 class="font-display font-semibold text-ink-100 text-lg mb-6">Quick Controls</h3>
+                <div class="grid grid-cols-3 gap-4">
+                    <div
+                        class="bg-white border border-hairline rounded-xl p-5 hover:border-ace-blue/30 transition-colors cursor-pointer group">
+                        <div
+                            class="w-10 h-10 bg-surface rounded-lg flex items-center justify-center text-ink-40 group-hover:bg-ace-blue-tint group-hover:text-ace-blue transition-colors mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            </svg>
+                        </div>
+                        <div class="text-[14px] font-medium text-ink-80 mb-1">Lock Card</div>
+                        <div class="text-[11px] text-ink-40">Temporarily freeze transactions</div>
+                    </div>
+                    <div
+                        class="bg-white border border-hairline rounded-xl p-5 hover:border-ace-blue/30 transition-colors cursor-pointer group">
+                        <div
+                            class="w-10 h-10 bg-surface rounded-lg flex items-center justify-center text-ink-40 group-hover:bg-ace-blue-tint group-hover:text-ace-blue transition-colors mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="1.5" />
+                            </svg>
+                        </div>
+                        <div class="text-[14px] font-medium text-ink-80 mb-1">Set Limits</div>
+                        <div class="text-[11px] text-ink-40">ATM, POS, and online limits</div>
+                    </div>
+                    <div
+                        class="bg-white border border-hairline rounded-xl p-5 hover:border-ace-blue/30 transition-colors cursor-pointer group">
+                        <div
+                            class="w-10 h-10 bg-surface rounded-lg flex items-center justify-center text-ink-40 group-hover:bg-ace-blue-tint group-hover:text-ace-blue transition-colors mb-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="1.5" />
+                                <path
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            </svg>
+                        </div>
+                        <div class="text-[14px] font-medium text-ink-80 mb-1">View PIN</div>
+                        <div class="text-[11px] text-ink-40">Reveal card PIN securely</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent -->
+            <section>
+                <div class="flex justify-between items-baseline mb-6">
+                    <h3 class="font-display font-semibold text-ink-100 text-lg">Card Transactions</h3><a
+                        class="text-xs font-medium text-ace-blue hover:underline" href="transactions.html">View all</a>
+                </div>
+                <div class="bg-white border border-hairline rounded-xl overflow-hidden">
+                    <div
+                        class="flex items-center py-4 px-5 border-b border-hairline hover:bg-surface/50 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 bg-surface flex items-center justify-center rounded-lg text-ink-40"><svg
+                                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="1.5" />
+                            </svg></div>
+                        <div class="ml-4 flex-1">
+                            <div class="text-[14px] font-medium text-ink-80">Apple Store Regent St.</div>
+                            <div class="text-[11px] text-ink-40">Debit · 14 Oct</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[14px] font-mono font-medium text-ink-80">−₹ 1,29,900.00</div>
+                            <div class="text-[10px] text-ink-20">COMPLETED</div>
+                        </div>
+                    </div>
+                    <div
+                        class="flex items-center py-4 px-5 border-b border-hairline hover:bg-surface/50 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 bg-surface flex items-center justify-center rounded-lg text-ink-40"><svg
+                                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            </svg></div>
+                        <div class="ml-4 flex-1">
+                            <div class="text-[14px] font-medium text-ink-80">Zara India Online</div>
+                            <div class="text-[11px] text-ink-40">Credit · 12 Oct</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[14px] font-mono font-medium text-ink-80">−₹ 8,990.00</div>
+                            <div class="text-[10px] text-ink-20">COMPLETED</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center py-4 px-5 hover:bg-surface/50 transition-colors cursor-pointer">
+                        <div class="w-10 h-10 bg-surface flex items-center justify-center rounded-lg text-ink-40"><svg
+                                class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                                    stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" />
+                            </svg></div>
+                        <div class="ml-4 flex-1">
+                            <div class="text-[14px] font-medium text-ink-80">Netflix Subscription</div>
+                            <div class="text-[11px] text-ink-40">Credit · Auto-debit · 10 Oct</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-[14px] font-mono font-medium text-ink-80">−₹ 649.00</div>
+                            <div class="text-[10px] text-ink-20">COMPLETED</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer
+            class="max-w-[860px] mx-auto py-12 px-6 border-t border-hairline mt-12 flex justify-between items-center text-ink-20 text-[11px] font-medium tracking-wide">
+            <div>© 2035 ACE BANK INTERNATIONAL</div>
+            <div class="flex gap-6"><a class="hover:text-ink-60 transition-colors uppercase" href="#">Security</a><a
+                    class="hover:text-ink-60 transition-colors uppercase" href="#">Privacy</a><a
+                    class="hover:text-ink-60 transition-colors uppercase" href="#">Contact</a></div>
+        </footer>
+    </main>
+    <script src="js/ace-db.js"></script>
+    <script src="js/precision-auth.js"></script>
+</body>
+
+</html>

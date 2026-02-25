@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ACE Bank</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body data-theme="light">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <span class="material-symbols-outlined">bolt</span>
+                </div>
+                <h2>ACE BANK</h2>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="active" data-page="dashboard" onclick="SAL.actions.switchPage('dashboard')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">dashboard</span>
+                    Dashboard
+                </li>
+                <li data-page="accounts" onclick="SAL.actions.switchPage('accounts')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">account_balance_wallet</span>
+                    Accounts
+                </li>
+                <li data-page="transactions" onclick="SAL.actions.switchPage('transactions')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">swap_horiz</span>
+                    Transactions
+                    <span class="badge" id="navTxBadge">4</span>
+                </li>
+                <li data-page="analytics" onclick="SAL.actions.switchPage('analytics')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">monitoring</span>
+                    Analytics
+                </li>
+                <li data-page="cards" onclick="SAL.actions.switchPage('cards')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">credit_card</span>
+                    Cards
+                </li>
+            </ul>
+
+            <div class="nav-section-label">Preferences</div>
+            <ul>
+                <li data-page="settings" onclick="SAL.actions.switchPage('settings')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">settings</span>
+                    Settings
+                </li>
+                <li data-page="support" onclick="SAL.actions.switchPage('support')">
+                    <div class="active-indicator"></div>
+                    <span class="material-symbols-outlined">help_outline</span>
+                    Support
+                </li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="avatar" style="background: linear-gradient(135deg, #0066ff, #a855f7)"></div>
+                <div class="user-info">
+                    <span class="user-name" id="sidebarUserName">User</span>
+                    <span class="user-role">Premium Client</span>
+                </div>
+                <button class="logout-btn" onclick="SAL.actions.logout()" title="Logout">
+                    <span class="material-symbols-outlined">logout</span>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="top-header">
+            <div class="search-bar">
+                <span class="material-symbols-outlined">search</span>
+                <input type="text" id="searchInput" placeholder="Search transactions, accounts..."
+                    oninput="SAL.actions.handleSearch()">
+                <div class="search-dropdown" id="searchDropdown"></div>
+            </div>
+
+            <div class="header-actions">
+                <button class="icon-btn" onclick="SAL.actions.toggleDarkMode()" title="Toggle Dark Mode">
+                    <span class="material-symbols-outlined" id="darkModeIcon">dark_mode</span>
+                </button>
+                <button class="icon-btn" onclick="SAL.actions.toggleNotifPanel()" title="Notifications">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span class="pulse-dot" id="notifDot"></span>
+                </button>
+                <button class="btn-primary new-payment-btn" onclick="SAL.actions.openModal('newPaymentModal')">
+                    <span class="material-symbols-outlined">add</span>
+                    NEW PAYMENT
+                </button>
+            </div>
+        </header>
+
+        <!-- Pages Container -->
+        <div class="pages-container">
+
+            <!-- PAGE: Dashboard -->
+            <div id="page-dashboard" class="page-view active animate-fade-up">
+
+                <div class="hero-card">
+                    <div class="hero-left">
+                        <div class="hero-label">Total Available Balance</div>
+                        <div class="hero-balance">
+                            <h1 id="heroBalance">₹0.00</h1>
+                            <span class="trend-badge positive">
+                                <span class="material-symbols-outlined">trending_up</span>
+                                +2.4%
+                            </span>
+                        </div>
+                        <div class="hero-tag">Primary Savings •••• 4242</div>
+                    </div>
+                    <div class="hero-right">
+                        <button class="btn-primary" onclick="SAL.actions.openModal('transferModal')">Transfer
+                            Money</button>
+                        <button class="btn-secondary" onclick="SAL.actions.openModal('addFundsModal')">Add
+                            Funds</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card ripple-container" onclick="SAL.actions.switchPage('analytics')">
+                        <div class="stat-icon positive">
+                            <span class="material-symbols-outlined">trending_up</span>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-title">Monthly Income</div>
+                            <div class="stat-value">₹0.00</div>
+                            <div class="stat-trend text-muted">No data</div>
+                        </div>
+                    </div>
+                    <div class="stat-card ripple-container" onclick="SAL.actions.switchPage('analytics')">
+                        <div class="stat-icon negative">
+                            <span class="material-symbols-outlined">trending_down</span>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-title">Expenses</div>
+                            <div class="stat-value">₹0.00</div>
+                            <div class="stat-trend text-muted">No data</div>
+                        </div>
+                    </div>
+                    <div class="stat-card ripple-container" onclick="SAL.actions.switchPage('accounts')">
+                        <div class="stat-icon info">
+                            <span class="material-symbols-outlined">bar_chart</span>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-title">Investments</div>
+                            <div class="stat-value">₹0.00</div>
+                            <div class="stat-trend text-muted">No data</div>
+                        </div>
+                    </div>
+                    <div class="stat-card ripple-container"
+                        onclick="SAL.actions.showToast('Credit score breakdown coming soon', 'info')">
+                        <div class="stat-icon success">
+                            <span class="material-symbols-outlined">verified</span>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-title">Credit Score</div>
+                            <div class="stat-value">---</div>
+                            <div class="stat-trend text-muted">No score yet</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions-grid">
+                    <div class="action-card ripple-container" onclick="SAL.actions.openModal('transferModal')">
+                        <div class="action-icon" style="background:#e0f2fe; color:#0284c7;"><span
+                                class="material-symbols-outlined">send</span></div>
+                        <span>Send Money</span>
+                    </div>
+                    <div class="action-card ripple-container" onclick="SAL.actions.openModal('addFundsModal')">
+                        <div class="action-icon" style="background:#dcfce7; color:#16a34a;"><span
+                                class="material-symbols-outlined">download</span></div>
+                        <span>Receive</span>
+                    </div>
+                    <div class="action-card ripple-container" onclick="SAL.actions.openModal('scanPayModal')">
+                        <div class="action-icon" style="background:#fef3c7; color:#d97706;"><span
+                                class="material-symbols-outlined">qr_code_scanner</span></div>
+                        <span>Scan & Pay</span>
+                    </div>
+                    <div class="action-card ripple-container" onclick="SAL.actions.openModal('newPaymentModal')">
+                        <div class="action-icon" style="background:#f3e8ff; color:#9333ea;"><span
+                                class="material-symbols-outlined">receipt_long</span></div>
+                        <span>Pay Bills</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-bottom-grid">
+                    <div class="recent-txns-panel card">
+                        <div class="panel-header">
+                            <h3>Recent Transactions</h3>
+                            <button class="btn-text" onclick="SAL.actions.switchPage('transactions')">View All</button>
+                        </div>
+                        <div class="txn-list" id="dashboardTxnList">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <div class="spending-panel card">
+                        <div class="panel-header">
+                            <h3>Spending Summary</h3>
+                        </div>
+                        <div class="donut-chart-container">
+                            <svg viewBox="0 0 36 36" class="donut-chart">
+                                <circle class="donut-ring" cx="18" cy="18" r="15.915" fill="transparent"
+                                    stroke="var(--border)" stroke-width="3"></circle>
+                                <circle class="donut-segment tech" cx="18" cy="18" r="15.915" fill="transparent"
+                                    stroke="var(--primary)" stroke-width="3" stroke-dasharray="60 40"
+                                    stroke-dashoffset="25"></circle>
+                                <circle class="donut-segment food" cx="18" cy="18" r="15.915" fill="transparent"
+                                    stroke="var(--bg-dark)" stroke-width="3" stroke-dasharray="25 75"
+                                    stroke-dashoffset="-35"></circle>
+                                <circle class="donut-segment life" cx="18" cy="18" r="15.915" fill="transparent"
+                                    stroke="var(--text-muted)" stroke-width="3" stroke-dasharray="15 85"
+                                    stroke-dashoffset="-60"></circle>
+                                <g class="donut-text">
+                                    <text x="18" y="16" class="donut-lbl">TOTAL</text>
+                                    <text x="18" y="22" class="donut-val">₹18.2k</text>
+                                </g>
+                            </svg>
+                        </div>
+                        <div class="legend">
+                            <div class="legend-item ripple-container"
+                                onclick="SAL.actions.showToast('Technology: ₹10,920 (60%)', 'info')">
+                                <span class="dot bg-tech" style="background:var(--primary)"></span> Technology (60%)
+                            </div>
+                            <div class="legend-item ripple-container"
+                                onclick="SAL.actions.showToast('Food: ₹4,550 (25%)', 'info')">
+                                <span class="dot bg-food" style="background:var(--bg-dark)"></span> Food (25%)
+                            </div>
+                            <div class="legend-item ripple-container"
+                                onclick="SAL.actions.showToast('Lifestyle: ₹2,730 (15%)', 'info')">
+                                <span class="dot bg-life" style="background:var(--text-muted)"></span> Lifestyle (15%)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PAGE: Accounts -->
+            <div id="page-accounts" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>My Accounts</h2>
+                    <button class="btn-primary" onclick="SAL.actions.openModal('addAccountModal')">Add Account</button>
+                </div>
+                <div class="accounts-list">
+                    <div class="account-card card ripple-container"
+                        onclick="SAL.actions.showToast('Full statement coming soon', 'info')">
+                        <div class="acc-info">
+                            <h3>Primary Savings •••• 4242</h3>
+                            <span class="acc-bank text-muted">HDFC Bank</span>
+                        </div>
+                        <div class="acc-meta">
+                            <div class="acc-bal hero-bal-display">₹0.00</div>
+                            <span class="badge positive">Active</span>
+                        </div>
+                    </div>
+                    <div class="account-card card ripple-container"
+                        onclick="SAL.actions.showToast('Full statement coming soon', 'info')">
+                        <div class="acc-info">
+                            <h3>Current Account •••• 8891</h3>
+                            <span class="acc-bank text-muted">SBI</span>
+                        </div>
+                        <div class="acc-meta">
+                            <div class="acc-bal">₹0.00</div>
+                            <span class="badge positive">Active</span>
+                        </div>
+                    </div>
+                    <div class="account-card card ripple-container"
+                        onclick="SAL.actions.showToast('Full statement coming soon', 'info')">
+                        <div class="acc-info">
+                            <h3>Investment Portfolio</h3>
+                            <span class="acc-bank text-muted">Zerodha</span>
+                        </div>
+                        <div class="acc-meta">
+                            <div class="acc-bal">₹0.00</div>
+                            <span class="trend-badge text-muted">No data</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Transactions -->
+            <div id="page-transactions" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>All Transactions</h2>
+                    <div class="actions-row">
+                        <button class="btn-secondary"
+                            onclick="SAL.actions.showToast('Filter panel coming in next update', 'info')">
+                            <span class="material-symbols-outlined">filter_list</span> Filter
+                        </button>
+                        <button class="btn-secondary" onclick="SAL.actions.exportTransactions()">
+                            <span class="material-symbols-outlined">download</span> Export CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="card full-txn-card">
+                    <div class="txn-list" id="fullTxnList">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Analytics -->
+            <div id="page-analytics" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>Analytics & Reports</h2>
+                </div>
+
+                <div class="analytics-grid">
+                    <div class="chart-panel card">
+                        <div class="panel-header">
+                            <h3>Monthly Spending</h3>
+                            <select class="form-input year-select" style="width:100px; padding:0.5rem;"
+                                onchange="SAL.actions.updateChartYear(this.value)">
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        <div class="bar-chart-container" id="spendingBarChart">
+                            <!-- Injected JS bars -->
+                        </div>
+                    </div>
+
+                    <div class="inc-exp-panel card">
+                        <h3>Income vs Expenses</h3>
+                        <div class="progress-bar-group" style="margin-top:1.5rem">
+                            <div class="prog-labels">
+                                <span>Income</span>
+                                <span>₹0.00</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill bg-success" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-bar-group" style="margin-top:1.5rem">
+                            <div class="prog-labels">
+                                <span>Expenses</span>
+                                <span>₹0.00</span>
+                            </div>
+                            <div class="prog-track">
+                                <div class="prog-fill bg-error" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 style="margin:2rem 0 1rem;">Category Breakdown</h3>
+                <div class="category-grid">
+                    <div class="cat-card card">
+                        <div class="cat-icon" style="background:var(--primary);color:white;"><span
+                                class="material-symbols-outlined">devices</span></div>
+                        <div class="cat-details">
+                            <div class="cat-title">Technology</div>
+                            <div class="cat-amt">₹0.00</div>
+                        </div>
+                    </div>
+                    <div class="cat-card card">
+                        <div class="cat-icon" style="background:var(--bg-dark);color:white;"><span
+                                class="material-symbols-outlined">restaurant</span></div>
+                        <div class="cat-details">
+                            <div class="cat-title">Food & Dining</div>
+                            <div class="cat-amt">₹0.00</div>
+                        </div>
+                    </div>
+                    <div class="cat-card card">
+                        <div class="cat-icon" style="background:var(--text-muted);color:white;"><span
+                                class="material-symbols-outlined">shopping_bag</span></div>
+                        <div class="cat-details">
+                            <div class="cat-title">Lifestyle</div>
+                            <div class="cat-amt">₹0.00</div>
+                        </div>
+                    </div>
+                    <div class="cat-card card">
+                        <div class="cat-icon" style="background:var(--info);color:white;"><span
+                                class="material-symbols-outlined">commute</span></div>
+                        <div class="cat-details">
+                            <div class="cat-title">Transport</div>
+                            <div class="cat-amt">₹0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Cards -->
+            <div id="page-cards" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>My Cards</h2>
+                    <button class="btn-primary" onclick="SAL.actions.openModal('applyCardModal')">Apply for
+                        Card</button>
+                </div>
+
+                <div class="cards-layout">
+                    <!-- Left: Card Visual -->
+                    <div class="card-visual-col">
+                        <div class="credit-card-visual" id="creditCardVisual"
+                            onclick="SAL.actions.showToast('Card active. Next billing cycle: Nov 15.', 'info')">
+                            <div class="card-glass"></div>
+                            <div class="card-top">
+                                <span class="material-symbols-outlined">contactless</span>
+                                <span class="card-type">ACE Signature</span>
+                            </div>
+                            <div class="card-chip"></div>
+                            <div class="card-number">4521 8891 3324 7654</div>
+                            <div class="card-bottom">
+                                <div class="card-holder">
+                                    <span class="lbl-small">Card Holder</span>
+                                    <span class="val-txt" id="cardHolderName">ARJUN MEHTA</span>
+                                </div>
+                                <div class="card-expiry">
+                                    <span class="lbl-small">Expires</span>
+                                    <span class="val-txt">09/28</span>
+                                </div>
+                                <div class="card-logo">
+                                    <div class="circle c1"></div>
+                                    <div class="circle c2"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-actions-row" style="margin-top:1.5rem">
+                            <button class="btn-secondary" style="width:100%" id="freezeCardBtn"
+                                onclick="SAL.actions.toggleFreezeCard()">
+                                <span class="material-symbols-outlined">ac_unit</span> <span id="freezeBtnText">Freeze
+                                    Card</span>
+                            </button>
+                            <button class="btn-secondary" style="width:100%"
+                                onclick="SAL.actions.showToast('CVV: 482 | PIN: ****', 'info')">
+                                <span class="material-symbols-outlined">visibility</span> View Details
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Info -->
+                    <div class="card-info-col">
+                        <div class="card spend-panel">
+                            <h3>Monthly Spend Limit</h3>
+                            <div class="spend-stats" style="margin-top:1rem">
+                                <div class="s-left">
+                                    <span class="text-muted">Used</span>
+                                    <h4>₹0.00</h4>
+                                </div>
+                                <div class="s-right text-right">
+                                    <span class="text-muted">Total Limit</span>
+                                    <h4>₹0.00</h4>
+                                </div>
+                            </div>
+                            <div class="prog-track" style="margin-top:1rem">
+                                <div class="prog-fill" style="width: 0%; background:var(--primary);"></div>
+                            </div>
+                        </div>
+
+                        <div class="card" style="margin-top:1.5rem">
+                            <h3>Recent Card Activity</h3>
+                            <div class="txn-list" style="margin-top:1rem">
+                                <div class="text-muted text-sm text-center py-4">No recent activity</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE: Settings -->
+            <div id="page-settings" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>Preferences & Settings</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card card">
+                        <h3>Notifications</h3>
+                        <div class="setting-row">
+                            <div class="set-text">
+                                <h4>Transaction Alerts</h4>
+                                <p class="text-muted">Get emails and push notifications for deposits and withdrawals.
+                                </p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="set-txalert" onchange="SAL.actions.updateSetting('txalert')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="set-text">
+                                <h4>Payment Reminders</h4>
+                                <p class="text-muted">Notify me 3 days before scheduled payments.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="set-reminders"
+                                    onchange="SAL.actions.updateSetting('reminders')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="set-text">
+                                <h4>Marketing Emails</h4>
+                                <p class="text-muted">Receive ACE Bank news, offers, and surveys.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="set-marketing"
+                                    onchange="SAL.actions.updateSetting('marketing')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-card card">
+                        <h3>Security & Access</h3>
+                        <div class="setting-row">
+                            <div class="set-text">
+                                <h4>Two-Factor Authentication (2FA)</h4>
+                                <p class="text-muted">Require an SMS code for untrusted devices.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="set-2fa" onchange="SAL.actions.updateSetting('2fa')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-row">
+                            <div class="set-text">
+                                <h4>Biometric Login</h4>
+                                <p class="text-muted">Use Fingerprint or Face ID when using our mobile app.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="set-biometric"
+                                    onchange="SAL.actions.updateSetting('biometric')">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-actions" style="margin-top:1.5rem; display:flex; gap:1rem;">
+                    <button class="btn-primary"
+                        onclick="SAL.actions.showToast('Settings saved successfully', 'success')">Save Changes</button>
+                    <button class="btn-secondary" onclick="SAL.actions.resetSettings()">Reset Defaults</button>
+                </div>
+            </div>
+
+            <!-- PAGE: Support -->
+            <div id="page-support" class="page-view animate-fade-up hidden">
+                <div class="page-header">
+                    <h2>Help & Support</h2>
+                </div>
+
+                <div class="support-grid">
+                    <div class="card support-card ripple-container" onclick="SAL.actions.startLiveChat()">
+                        <span class="material-symbols-outlined s-icon">chat_bubble</span>
+                        <h3>Live Chat Support</h3>
+                        <p class="text-muted">Connect with our support team instantly.</p>
+                        <span class="material-symbols-outlined s-arrow">chevron_right</span>
+                    </div>
+                    <div class="card support-card ripple-container" onclick="SAL.actions.callSupport()">
+                        <span class="material-symbols-outlined s-icon">call</span>
+                        <h3>Call Support</h3>
+                        <p class="text-muted">Speak directly to an ACE agent. 24/7.</p>
+                        <span class="material-symbols-outlined s-arrow">chevron_right</span>
+                    </div>
+                    <div class="card support-card ripple-container"
+                        onclick="SAL.actions.showToast('Redirecting to Knowledge Base...', 'info')">
+                        <span class="material-symbols-outlined s-icon">menu_book</span>
+                        <h3>FAQ & Knowledge Base</h3>
+                        <p class="text-muted">Browse articles, tutorials, and common issues.</p>
+                        <span class="material-symbols-outlined s-arrow">chevron_right</span>
+                    </div>
+                    <div class="card support-card ripple-container"
+                        onclick="SAL.actions.openModal('submitTicketModal')">
+                        <span class="material-symbols-outlined s-icon">support_agent</span>
+                        <h3>Submit a Ticket</h3>
+                        <p class="text-muted">Create a detailed request for technical issues.</p>
+                        <span class="material-symbols-outlined s-arrow">chevron_right</span>
+                    </div>
+                </div>
+            </div>
+
+        </div> <!-- /Pages Container -->
+
+    </main>
+
+    <!-- Overlay & Modals -->
+    <div class="modal-overlay hidden" id="modalOverlay" onclick="SAL.actions.closeModal()"></div>
+
+    <!-- Notification Panel -->
+    <aside class="notif-panel hidden" id="notifPanel">
+        <div class="notif-header">
+            <h3>Notifications</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeNotifPanel()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="notif-actions" style="padding: 0 1.5rem 1rem;">
+            <button class="btn-text" onclick="SAL.actions.markAllNotifsRead()">Mark all as read</button>
+        </div>
+        <div class="notif-list" id="notifList">
+            <!-- Injected via JS -->
+        </div>
+    </aside>
+
+    <!-- Transfer Modal -->
+    <div class="modal hidden" id="transferModal">
+        <div class="modal-header">
+            <h3>Transfer Money</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="transferForm" onsubmit="SAL.actions.handleTransfer(event)">
+                <div class="input-group">
+                    <label>From Account</label>
+                    <select class="form-input">
+                        <option>Primary Savings (₹<span class="modal-bal-display"></span>)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Recipient Name or UPI ID</label>
+                    <input type="text" id="transferRecipient" class="form-input" placeholder="e.g. rakesh@upi" required>
+                </div>
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="transferAmount" class="form-input" min="1" placeholder="Enter amount"
+                        required>
+                </div>
+                <div class="input-group">
+                    <label>Note (Optional)</label>
+                    <input type="text" id="transferNote" class="form-input" placeholder="e.g. Dinner">
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Confirm Transfer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Funds Modal -->
+    <div class="modal hidden" id="addFundsModal">
+        <div class="modal-header">
+            <h3>Add Funds</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="addFundsForm" onsubmit="SAL.actions.handleAddFunds(event)">
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="addFundsAmount" class="form-input" min="1" placeholder="Enter amount"
+                        required>
+                </div>
+                <div class="input-group">
+                    <label>Payment Method</label>
+                    <select id="addFundsMethod" class="form-input">
+                        <option value="UPI">UPI</option>
+                        <option value="Net Banking">Net Banking</option>
+                        <option value="Debit Card">Debit Card</option>
+                        <option value="NEFT">NEFT</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Add to Balance</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Payment Modal -->
+    <div class="modal hidden" id="newPaymentModal">
+        <div class="modal-header">
+            <h3>New Payment</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="newPaymentForm" onsubmit="SAL.actions.handleNewPayment(event)">
+                <div class="input-group">
+                    <label>Payment Type</label>
+                    <select id="paymentType" class="form-input">
+                        <option value="Electricity Bill">Electricity Bill</option>
+                        <option value="Credit Card Bill">Credit Card Bill</option>
+                        <option value="Mobile Recharge">Mobile Recharge</option>
+                        <option value="Water Tax">Water Tax</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Payee / Consumer No.</label>
+                    <input type="text" id="paymentPayee" class="form-input" placeholder="Consumer Number" required>
+                </div>
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="paymentAmount" class="form-input" min="1" placeholder="Amount" required>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Make Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scan & Pay Modal -->
+    <div class="modal hidden" id="scanPayModal">
+        <div class="modal-header">
+            <h3>Scan & Pay</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body text-center">
+            <div class="qr-placeholder" style="margin-bottom:1.5rem">
+                <span class="material-symbols-outlined text-muted" style="font-size: 64px;">qr_code_2</span>
+            </div>
+            <form id="scanPayForm" onsubmit="SAL.actions.handleScanPay(event)" class="text-left">
+                <div class="input-group">
+                    <label>UPI ID or Phone</label>
+                    <input type="text" id="scanPayRecipient" class="form-input" placeholder="e.g. store@okaxis"
+                        required>
+                </div>
+                <div class="input-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="scanPayAmount" class="form-input" min="1" placeholder="Amount" required>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Pay Now</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Apply for Card Modal -->
+    <div class="modal hidden" id="applyCardModal">
+        <div class="modal-header">
+            <h3>Apply for Credit Card</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="applyCardForm" onsubmit="SAL.actions.handleApplyCard(event)">
+                <div class="input-group">
+                    <label>Card Type</label>
+                    <select class="form-input">
+                        <option>ACE Platinum Rewards</option>
+                        <option>ACE Super Cashback</option>
+                        <option>ACE Travel Miles</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Annual Income (₹)</label>
+                    <input type="number" class="form-input" placeholder="e.g. 500000" required>
+                </div>
+                <div class="input-group">
+                    <label>Employment Type</label>
+                    <select class="form-input">
+                        <option>Salaried</option>
+                        <option>Self-Employed</option>
+                        <option>Business Owner</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Submit Ticket Modal -->
+    <div class="modal hidden" id="submitTicketModal">
+        <div class="modal-header">
+            <h3>Submit a Support Ticket</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="submitTicketForm" onsubmit="SAL.actions.handleSubmitTicket(event)">
+                <div class="input-group">
+                    <label>Issue Category</label>
+                    <select class="form-input">
+                        <option>Transaction Failure</option>
+                        <option>Account Recovery</option>
+                        <option>Fraud Report</option>
+                        <option>Other Technical Issue</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Subject</label>
+                    <input type="text" class="form-input" placeholder="Brief description of issue" required>
+                </div>
+                <div class="input-group">
+                    <label>Description</label>
+                    <textarea class="form-input" rows="4" placeholder="Provide detailed information"
+                        required></textarea>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Create Ticket</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Account Modal -->
+    <div class="modal hidden" id="addAccountModal">
+        <div class="modal-header">
+            <h3>Add External Account</h3>
+            <button class="icon-btn" onclick="SAL.actions.closeModal()"><span
+                    class="material-symbols-outlined">close</span></button>
+        </div>
+        <div class="modal-body">
+            <form id="addAccountForm" onsubmit="SAL.actions.handleAddAccount(event)">
+                <div class="input-group">
+                    <label>Bank Name</label>
+                    <input type="text" class="form-input" placeholder="e.g. AXIS Bank" required>
+                </div>
+                <div class="input-group">
+                    <label>Account Number</label>
+                    <input type="text" class="form-input" placeholder="Account No" required>
+                </div>
+                <div class="input-group">
+                    <label>IFSC Code</label>
+                    <input type="text" class="form-input" placeholder="IFSC Code" required>
+                </div>
+                <button type="submit" class="btn-primary w-full" style="margin-top:1.5rem">Link Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+
+</html>

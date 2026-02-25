@@ -1,6 +1,5 @@
 package com.acebank.lite.service;
 
-
 import com.acebank.lite.dao.BankUserDao;
 import com.acebank.lite.dao.BankUserDaoImpl;
 
@@ -23,7 +22,6 @@ public class BankServiceImpl implements BankService {
     private final BankUserDao userDao = new BankUserDaoImpl(); // Or get via Singleton
     private static final BigDecimal DAILY_LIMIT = new BigDecimal("500.00");
 
-
     @Override
     public Optional<LoginResult> authenticate(int accountNo, String plainPassword) {
         try {
@@ -41,7 +39,6 @@ public class BankServiceImpl implements BankService {
         return Optional.empty();
     }
 
-
     @Override
     public boolean changePassword(int accountNo, String oldPlain, String newPlain) throws SQLException {
         String storedHash = userDao.getPasswordHash(accountNo);
@@ -52,7 +49,6 @@ public class BankServiceImpl implements BankService {
         }
         return false;
     }
-
 
     @Override
     public boolean processDeposit(int accountNo, BigDecimal amount) {
@@ -69,7 +65,6 @@ public class BankServiceImpl implements BankService {
             return false;
         }
     }
-
 
     @Override
     public String withdraw(int accountNo, BigDecimal amount) {
@@ -97,7 +92,6 @@ public class BankServiceImpl implements BankService {
         }
     }
 
-
     @Override
     public Optional<LoginResult> registerUser(User user) {
         // 1. Generate a unique account number
@@ -108,15 +102,16 @@ public class BankServiceImpl implements BankService {
         // Create a new version of the record with the hash
         User secureUser = new User(
                 user.userId(), user.firstName(), user.lastName(),
-                user.aadhaarNo(), user.email(), secureHash, user.createdAt()
-        );
+                user.aadhaarNo(), user.email(), user.phone(), secureHash, user.createdAt());
         try {
             // 2. Save to Database via DAO
             boolean isSaved = userDao.signUp(secureUser, accountNumber);
 
             if (isSaved) {
-                // 3. Send Welcome Email (Asynchronous is better, but this works for now)
-                sendWelcomeEmail(user, accountNumber);
+                // 3. Send Welcome Email ASYNCHRONOUSLY (don't block the response)
+                final User emailUser = user;
+                final int accNo = accountNumber;
+                new Thread(() -> sendWelcomeEmail(emailUser, accNo)).start();
 
                 // 4. Return the details to be used for the session
                 return Optional.of(new LoginResult(
@@ -124,15 +119,13 @@ public class BankServiceImpl implements BankService {
                         user.lastName(),
                         user.email(),
                         BigDecimal.ZERO,
-                        accountNumber
-                ));
+                        accountNumber));
             }
         } catch (Exception e) {
             log.severe("Signup Error: " + e.getMessage());
         }
         return Optional.empty();
     }
-
 
     private void sendWelcomeEmail(User user, int accNo) {
         String subject = "Welcome to AceBank";
@@ -238,23 +231,21 @@ public class BankServiceImpl implements BankService {
         return false;
     }
 
-
     @Override
     public boolean applyForLoan(String firstName, String email, String loanType) {
         String subject = "Loan Application Received - AceBank";
         String body = String.format(
                 """
                         Dear %s,
-                        
+
                         Thank you for applying for a %s loan with AceBank.
                         We have received your request and our team will review it shortly.
-                        
+
                         We will be in touch with you as soon as a decision is made.
-                        
+
                         Sincerely,
                         The AceBank Team""",
-                firstName, loanType
-        );
+                firstName, loanType);
 
         try {
             MailUtil.sendMail(email, subject, body);
@@ -264,6 +255,5 @@ public class BankServiceImpl implements BankService {
             return false;
         }
     }
-
 
 }

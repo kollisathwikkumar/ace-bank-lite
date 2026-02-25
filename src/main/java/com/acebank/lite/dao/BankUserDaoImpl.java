@@ -10,7 +10,6 @@ import com.acebank.lite.util.QueryLoader;
 import java.sql.*;
 import java.util.Optional;
 
-
 import lombok.extern.java.Log;
 
 import java.math.BigDecimal;
@@ -25,7 +24,7 @@ public class BankUserDaoImpl implements BankUserDao {
         String sql = QueryLoader.get("user.get_password_by_acc");
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, accountNo);
 
@@ -45,7 +44,7 @@ public class BankUserDaoImpl implements BankUserDao {
     @Override
     public boolean login(int accountNo, String password) throws SQLException {
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(QueryLoader.get("user.login"))) {
+                PreparedStatement pstmt = conn.prepareStatement(QueryLoader.get("user.login"))) {
             pstmt.setInt(1, accountNo);
             pstmt.setString(2, password);
             ResultSet rs = pstmt.executeQuery();
@@ -53,13 +52,12 @@ public class BankUserDaoImpl implements BankUserDao {
         }
     }
 
-
     @Override
     public LoginResult getUserDetails(int accountNo) throws SQLException {
         String sql = QueryLoader.get("user.get_details");
 
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, accountNo);
 
@@ -70,14 +68,12 @@ public class BankUserDaoImpl implements BankUserDao {
                             rs.getString("LAST_NAME"),
                             rs.getString("EMAIL"),
                             rs.getBigDecimal("BALANCE"),
-                            rs.getInt("ACCOUNT_NO")
-                    );
+                            rs.getInt("ACCOUNT_NO"));
                 }
             }
         }
         throw new SQLException("User details not found for account: " + accountNo);
     }
-
 
     @Override
     public boolean signUp(User user, int accountNo) throws SQLException {
@@ -85,12 +81,14 @@ public class BankUserDaoImpl implements BankUserDao {
         try {
             conn.setAutoCommit(false);
 
-            PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("user.signup"), Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("user.signup"),
+                    Statement.RETURN_GENERATED_KEYS);
             ps1.setString(1, user.firstName());
             ps1.setString(2, user.lastName());
             ps1.setString(3, user.aadhaarNo());
             ps1.setString(4, user.email());
-            ps1.setString(5, user.passwordHash());
+            ps1.setString(5, user.phone());
+            ps1.setString(6, user.passwordHash());
             ps1.executeUpdate();
 
             ResultSet rs = ps1.getGeneratedKeys();
@@ -104,18 +102,18 @@ public class BankUserDaoImpl implements BankUserDao {
             return true;
         } catch (SQLException e) {
             conn.rollback();
+            log.severe("SignUp DAO Error: " + e.getMessage());
             return false;
         } finally {
-            conn.close();
+            conn.setAutoCommit(true);
         }
     }
-
 
     @Override
     public BigDecimal getDailyWithdrawalTotal(int accountNo) throws SQLException {
         String sql = QueryLoader.get("transaction.get_daily_withdrawal_total");
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, accountNo);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -215,7 +213,7 @@ public class BankUserDaoImpl implements BankUserDao {
     public List<Transaction> getStatement(int accountNo) throws SQLException {
         List<Transaction> txList = new ArrayList<>();
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(QueryLoader.get("transaction.statement"))) {
+                PreparedStatement pstmt = conn.prepareStatement(QueryLoader.get("transaction.statement"))) {
             pstmt.setInt(1, accountNo);
             pstmt.setInt(2, accountNo);
             ResultSet rs = pstmt.executeQuery();
@@ -223,8 +221,7 @@ public class BankUserDaoImpl implements BankUserDao {
                 txList.add(new Transaction(
                         rs.getInt("ID"), rs.getInt("SENDER_ACCOUNT"), rs.getInt("RECEIVER_ACCOUNT"),
                         rs.getBigDecimal("AMOUNT"), rs.getString("TX_TYPE"), rs.getString("REMARK"),
-                        rs.getTimestamp("CREATED_AT").toLocalDateTime()
-                ));
+                        rs.getTimestamp("CREATED_AT").toLocalDateTime()));
             }
         }
         return txList;
@@ -276,20 +273,18 @@ public class BankUserDaoImpl implements BankUserDao {
         }
     }
 
-
     @Override
     public Optional<AccountRecoveryDTO> getRecoveryDetails(String email) throws SQLException {
         String sql = QueryLoader.get("user.recover_details");
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 return Optional.of(new AccountRecoveryDTO(
                         rs.getString("FIRST_NAME"),
                         rs.getString("LAST_NAME"),
-                        rs.getInt("ACCOUNT_NO")
-                ));
+                        rs.getInt("ACCOUNT_NO")));
             }
         }
         return Optional.empty();
@@ -299,7 +294,7 @@ public class BankUserDaoImpl implements BankUserDao {
     public boolean accountExists(int accountNo) throws SQLException {
         String sql = "SELECT 1 FROM ACCOUNTS WHERE ACCOUNT_NO = ?";
         try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+                PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountNo);
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
@@ -311,7 +306,7 @@ public class BankUserDaoImpl implements BankUserDao {
     public BigDecimal getBalance(int accountNo) throws SQLException {
         String sql = QueryLoader.get("account.get_balance");
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, accountNo);
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -323,5 +318,33 @@ public class BankUserDaoImpl implements BankUserDao {
         return BigDecimal.ZERO;
     }
 
+    @Override
+    public Optional<Integer> getAccountByEmail(String email) throws SQLException {
+        String sql = QueryLoader.get("user.get_account_by_email");
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(rs.getInt("ACCOUNT_NO"));
+                }
+            }
+        }
+        return Optional.empty();
+    }
 
+    @Override
+    public Optional<Integer> getAccountByPhone(String phone) throws SQLException {
+        String sql = QueryLoader.get("user.get_account_by_phone");
+        try (Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, phone);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(rs.getInt("ACCOUNT_NO"));
+                }
+            }
+        }
+        return Optional.empty();
+    }
 }

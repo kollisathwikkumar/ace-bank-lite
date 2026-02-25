@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>ACE BANK | Profile Settings</title>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { 'ink-100': '#0a0a0f', 'ink-80': '#1c1c24', 'ink-60': '#3a3a48', 'ink-40': '#6b6b7e', 'ink-20': '#9999aa', 'ink-10': '#c8c8d4', 'surface': '#f4f4f6', 'surface-raised': '#efeff2', 'hairline': '#e8e8ed', 'hairline-dark': '#d1d1d8', 'off-white': '#f9f9fb', 'ace-blue': '#0066ff', 'ace-blue-deep': '#0047cc', 'ace-blue-tint': '#f0f5ff', 'dark-base': '#08080f', 'dark-surface': '#111119', 'dark-border': '#1e1e2e', 'success-accent': '#16a34a', 'error-accent': '#cc1111' }, fontFamily: { 'display': ['Outfit', 'sans-serif'], 'body': ['DM Sans', 'sans-serif'], 'mono': ['JetBrains Mono', 'monospace'], 'serif': ['Instrument Serif', 'serif'] }, letterSpacing: { 'tightest': '-0.04em', 'caps': '0.12em' } } } }
+    </script>
+    <style>
+        body {
+            background: #f9f9fb;
+            color: #3a3a48;
+            font-family: 'DM Sans', sans-serif
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d1d8;
+            border-radius: 10px
+        }
+
+        @keyframes enterUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .enter-animation {
+            animation: enterUp .4s cubic-bezier(.16, 1, .3, 1) both
+        }
+
+        .hover-arrow-slide .arrow {
+            transition: transform .2s ease
+        }
+
+        .hover-arrow-slide:hover .arrow {
+            transform: translateX(4px)
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0066ff;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #0066ff;
+        }
+
+        .toggle-checkbox {
+            right: 0;
+            z-index: 1;
+            border-color: #e8e8ed;
+            transition: all 0.3s;
+        }
+
+        .toggle-label {
+            width: 36px;
+            height: 20px;
+            background-color: #e8e8ed;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+
+        .toggle-checkbox:before {
+            content: "";
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: white;
+            border-radius: 50%;
+            transition: all 0.3s;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-checkbox:checked:before {
+            transform: translateX(16px);
+        }
+    </style>
+</head>
+
+<body class="flex min-h-screen">
+    <aside class="w-[220px] bg-dark-base border-r border-dark-border flex flex-col fixed h-full z-50">
+        <div class="h-[56px] flex flex-col justify-center px-6">
+            <div class="flex items-baseline gap-1"><span
+                    class="font-display font-bold text-white text-lg tracking-tight">ACE</span><span
+                    class="font-display font-light text-[10px] tracking-widest text-[#6b6b88] uppercase">Bank</span>
+            </div>
+        </div>
+        <nav class="flex-1 mt-6">
+            <div class="px-6 mb-4"><span
+                    class="text-[10px] font-medium text-[#6b6b88] tracking-caps uppercase">Banking</span></div>
+            <ul class="space-y-1">
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="dashboard.html">Dashboard</a></li>
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="transactions.html">Transactions</a></li>
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="cards.html">Cards</a></li>
+            </ul>
+            <div class="px-6 mt-8 mb-4"><span
+                    class="text-[10px] font-medium text-[#6b6b88] tracking-caps uppercase">Wealth</span></div>
+            <ul class="space-y-1">
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="investments.html">Investments</a></li>
+                <li><a class="flex items-center px-6 py-2 text-[#6b6b88] hover:text-white hover:bg-dark-surface text-[13px] font-medium transition-all"
+                        href="credit-score.html">Credit Score</a></li>
+            </ul>
+        </nav>
+        <!-- Active Profile Link -->
+        <a href="profile.html"
+            class="block p-6 border-t border-dark-border mt-auto hover:bg-white/5 transition-colors relative cursor-pointer">
+            <div class="absolute left-0 top-0 w-1 h-full bg-ace-blue"></div>
+            <div class="flex items-center justify-between">
+                <div>
+                    <div class="mb-1 text-white font-display text-[13px] font-medium" id="sidebar-user-name">Arjun Mehta
+                    </div>
+                    <div class="font-mono text-[11px] text-[#6b6b88] mb-2" id="sidebar-account-no">AC: 8842...4521</div>
+                    <div class="text-ace-blue text-[12px] font-medium">Profile Settings</div>
+                </div>
+            </div>
+        </a>
+    </aside>
+
+    <main class="flex-1 ml-[220px]">
+        <header
+            class="h-[52px] bg-white/80 backdrop-blur-xl border-b border-hairline sticky top-0 z-40 flex items-center justify-between px-10">
+            <div class="text-ink-20 text-xs">/ SETTINGS</div>
+            <div class="flex items-center gap-6">
+                <div class="relative w-[320px]"><input
+                        class="w-full bg-surface border-none rounded-full py-1.5 px-10 text-sm focus:ring-2 focus:ring-ace-blue-tint placeholder:text-ink-20"
+                        placeholder="Search parameters..." type="text" />
+                    <div class="absolute left-4 top-1/2 -translate-y-1/2"><svg class="w-3.5 h-3.5 text-ink-20"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                stroke-linejoin="round" stroke-width="2" />
+                        </svg></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="max-w-[860px] mx-auto py-12 px-6 enter-animation">
+            <section class="mb-10 flex justify-between items-end">
+                <div>
+                    <span
+                        class="inline-block px-2 py-0.5 bg-ace-blue-tint text-ace-blue text-[10px] font-bold tracking-widest uppercase rounded-[2px] mb-4"
+                        id="profile-account-type">Account
+                        Preferences</span>
+                    <h1 class="font-display text-[36px] font-bold leading-none text-ink-100 tracking-tightest">Settings
+                        & Profile</h1>
+                </div>
+                <button type="button" onclick="performLogout()"
+                    class="px-5 py-2.5 bg-surface text-error-accent text-[13px] font-medium rounded-full flex items-center gap-2 hover:bg-error-accent hover:text-white transition-colors">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Sign out
+                </button>
+            </section>
+
+            <!-- Personal Information -->
+            <section class="mb-12">
+                <h3 class="font-display font-semibold text-ink-100 text-lg mb-6">Personal Information</h3>
+                <div class="bg-white border border-hairline rounded-xl overflow-hidden">
+                    <div class="grid grid-cols-2">
+                        <div class="p-6 border-b border-r border-hairline">
+                            <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1.5">Full Name
+                            </div>
+                            <div class="text-[15px] font-medium text-ink-80" id="profile-name">Arjun Mehta</div>
+                        </div>
+                        <div class="p-6 border-b border-hairline">
+                            <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1.5">Email
+                                Address</div>
+                            <div class="text-[15px] font-medium text-ink-80" id="profile-email">
+                                arjun.mehta88@example.com</div>
+                        </div>
+                        <div class="p-6 border-r border-hairline">
+                            <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1.5">Primary
+                                Phone</div>
+                            <div class="text-[15px] font-medium text-ink-80">+91 98765 43210</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="text-[10px] font-medium text-ink-40 tracking-caps uppercase mb-1.5">Account
+                                Number</div>
+                            <div class="text-[15px] font-mono font-medium text-ink-80" id="profile-acc-no-full">0000
+                                8842 1933 4521</div>
+                        </div>
+                    </div>
+                    <div class="p-6 bg-surface border-t border-hairline flex justify-end">
+                        <button
+                            class="px-4 py-2 bg-white text-ink-80 border border-hairline text-[12px] font-medium rounded-full hover:bg-hairline transition-colors">Request
+                            Profile Update</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Security & Access -->
+            <section class="mb-12">
+                <h3 class="font-display font-semibold text-ink-100 text-lg mb-6">Security & Login</h3>
+                <div class="bg-white border border-hairline rounded-xl overflow-hidden divide-y divide-hairline">
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Two-Factor Authentication (2FA)</div>
+                            <div class="text-[12px] text-ink-40">Require an OTP via SMS for every new device login.
+                            </div>
+                        </div>
+                        <div class="relative inline-block w-9 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="2fa-toggle"
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                                checked />
+                            <label for="2fa-toggle"
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Passcode/Biometrics App Lock</div>
+                            <div class="text-[12px] text-ink-40">Use Face ID / Fingerprint to open the mobile
+                                application.</div>
+                        </div>
+                        <div class="relative inline-block w-9 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="bio-toggle"
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                                checked />
+                            <label for="bio-toggle"
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1 flex items-center gap-2">Change
+                                Password <span
+                                    class="px-2 py-0.5 bg-[#fff7ed] text-[#d97706] text-[9px] font-bold rounded-[2px] uppercase tracking-widest">Suggested</span>
+                            </div>
+                            <div class="text-[12px] text-ink-40">Last changed 8 months ago. We recommend rotating
+                                quarterly.</div>
+                        </div>
+                        <button
+                            class="text-ace-blue text-[13px] font-medium hover:text-ace-blue-deep transition-colors">Update</button>
+                    </div>
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Active Sessions</div>
+                            <div class="text-[12px] text-ink-40">2 devices currently signed in (Mac OS, iOS App)</div>
+                        </div>
+                        <button class="text-[13px] font-medium text-ink-40 hover:text-ink-80 transition-colors">Review
+                            devices</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Notifications -->
+            <section class="mb-12">
+                <h3 class="font-display font-semibold text-ink-100 text-lg mb-6">Notifications</h3>
+                <div class="bg-white border border-hairline rounded-xl overflow-hidden divide-y divide-hairline">
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Transactional Alerts (Email & SMS)
+                            </div>
+                            <div class="text-[12px] text-ink-40">All debits and credits above ₹ 100</div>
+                        </div>
+                        <div class="relative inline-block w-9 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="notif1-toggle"
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                                checked />
+                            <label for="notif1-toggle"
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Weekly Spend Summary</div>
+                            <div class="text-[12px] text-ink-40">Receive categorized spending reports via Email.</div>
+                        </div>
+                        <div class="relative inline-block w-9 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="notif2-toggle"
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                                checked />
+                            <label for="notif2-toggle"
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                    <div
+                        class="p-6 flex items-center justify-between group cursor-pointer hover:bg-surface/50 transition-colors">
+                        <div>
+                            <div class="text-[14px] font-medium text-ink-80 mb-1">Promotional Offers</div>
+                            <div class="text-[12px] text-ink-40">Pre-approved loans, credit card upgrades, and partner
+                                deals.</div>
+                        </div>
+                        <div class="relative inline-block w-9 mr-2 align-middle select-none">
+                            <input type="checkbox" name="toggle" id="notif3-toggle"
+                                class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer" />
+                            <label for="notif3-toggle"
+                                class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer
+            class="max-w-[860px] mx-auto py-12 px-6 border-t border-hairline mt-12 flex justify-between items-center text-ink-20 text-[11px] font-medium tracking-wide">
+            <div>© 2035 ACE BANK INTERNATIONAL</div>
+            <div class="flex gap-6"><a class="hover:text-ink-60 transition-colors uppercase" href="#">Security</a><a
+                    class="hover:text-ink-60 transition-colors uppercase" href="#">Privacy</a><a
+                    class="hover:text-ink-60 transition-colors uppercase" href="#">Contact</a></div>
+        </footer>
+    </main>
+
+    <!-- Connect logic scripts -->
+    <script src="js/ace-db.js"></script>
+    <script src="js/precision-auth.js"></script>
+    <script>
+        // Set the full account number as well
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof DB !== 'undefined' && DB.isLoggedIn()) {
+                const acc = DB.getLoggedInAccount();
+                const accEl = document.getElementById('profile-acc-no-full');
+                if (accEl && acc) {
+                    accEl.textContent = acc.accountNumber;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
