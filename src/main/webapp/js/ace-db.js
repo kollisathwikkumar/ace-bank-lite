@@ -10,6 +10,15 @@ class ACEBankDB {
         this.SESSION_KEY = 'ace_bank_session';
     }
 
+    // ── CONFIG ────────────────────────────────────────
+    _baseUrl() {
+        const path = window.location.pathname;
+        const ctxMatch = path.match(/^(\/[^\/]+)/);
+        // If we are at root (/) or something like /dashboard.html, use empty string
+        // If we are at /LaceBank/dashboard.html, use /LaceBank
+        return (ctxMatch && !path.endsWith('.html') && !path.endsWith('.jsp') && ctxMatch[1] !== '/api') ? ctxMatch[1] : '';
+    }
+
     // ── SESSION (localStorage only) ───────────────────
     _getSession() {
         try { return JSON.parse(localStorage.getItem(this.SESSION_KEY) || 'null'); }
@@ -39,7 +48,7 @@ class ACEBankDB {
     /** Sign up — POST /api/signup */
     async createAccount(formData) {
         try {
-            var response = await fetch('/api/signup', {
+            var response = await fetch(this._baseUrl() + '/api/signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -85,7 +94,7 @@ class ACEBankDB {
     /** Login — POST /api/login */
     async login(email, password) {
         try {
-            var response = await fetch('/api/login', {
+            var response = await fetch(this._baseUrl() + '/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, password: password })
@@ -131,7 +140,7 @@ class ACEBankDB {
     /** Login with phone — POST /api/login */
     async loginWithPhone(phone, password) {
         try {
-            var response = await fetch('/api/login', {
+            var response = await fetch(this._baseUrl() + '/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone: phone, password: password })
@@ -167,7 +176,7 @@ class ACEBankDB {
     /** Send OTP — POST /api/otp/send */
     async sendOtp(email) {
         try {
-            var response = await fetch('/api/otp/send', {
+            var response = await fetch(this._baseUrl() + '/api/otp/send', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })
@@ -181,7 +190,7 @@ class ACEBankDB {
     /** Verify OTP & login — POST /api/otp/verify */
     async verifyOtp(email, otp) {
         try {
-            var response = await fetch('/api/otp/verify', {
+            var response = await fetch(this._baseUrl() + '/api/otp/verify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email, otp: otp })
@@ -205,7 +214,7 @@ class ACEBankDB {
     /** Update balance — POST /api/balance */
     async updateBalance(accountNumber, amount, type) {
         try {
-            var response = await fetch('/api/balance', {
+            var response = await fetch(this._baseUrl() + '/api/balance', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ accountNumber: accountNumber, amount: amount, type: type })

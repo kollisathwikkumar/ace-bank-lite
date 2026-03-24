@@ -258,15 +258,15 @@ public class BankUserDaoImpl implements BankUserDao {
     @Override
     public boolean changePassword(int accountNo, String oldPw, String newPw) throws SQLException {
         try (Connection conn = getConnection()) {
-            int userId = -1;
-            PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("user.check_password_by_acc"));
+            // Use the correct query key: account.check_pw
+            PreparedStatement ps1 = conn.prepareStatement(QueryLoader.get("account.check_pw"));
             ps1.setInt(1, accountNo);
             ResultSet rs = ps1.executeQuery();
             if (rs.next() && rs.getString("PASSWORD_HASH").equals(oldPw)) {
-                userId = rs.getInt("USER_ID");
+                // user.update_password expects (newHash, accountNo)
                 PreparedStatement ps2 = conn.prepareStatement(QueryLoader.get("user.update_password"));
                 ps2.setString(1, newPw);
-                ps2.setInt(2, userId);
+                ps2.setInt(2, accountNo);
                 return ps2.executeUpdate() > 0;
             }
             return false;

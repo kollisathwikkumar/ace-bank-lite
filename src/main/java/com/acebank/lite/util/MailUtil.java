@@ -56,13 +56,14 @@ public class MailUtil {
     private static Properties getSmtpConfig() {
         Properties props = new Properties();
 
-        // Mapping keys from ConfigKeys to the Properties object
-        props.put(ConfigKeys.MAIL_SMTP_HOST, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_HOST));
-        props.put(ConfigKeys.MAIL_SMTP_PORT, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_PORT));
-        props.put(ConfigKeys.MAIL_SMTP_AUTH, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_AUTH));
-        props.put(ConfigKeys.MAIL_SMTP_STARTTLS, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_STARTTLS));
-        props.put(ConfigKeys.MAIL_SMTP_CONN_TIMEOUT, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_CONN_TIMEOUT));
-        props.put(ConfigKeys.MAIL_SMTP_TIMEOUT, ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_TIMEOUT));
+        // Standard SMTP properties
+        props.put("mail.smtp.host", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_HOST));
+        props.put("mail.smtp.port", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_PORT));
+        props.put("mail.smtp.auth", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_AUTH));
+        props.put("mail.smtp.starttls.enable", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_STARTTLS));
+        // Jakarta Mail expects "mail.smtp.connectiontimeout" (no hyphen)
+        props.put("mail.smtp.connectiontimeout", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_CONN_TIMEOUT));
+        props.put("mail.smtp.timeout", ConfigLoader.getProperty(ConfigKeys.MAIL_SMTP_TIMEOUT));
 
         return props;
     }
