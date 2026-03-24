@@ -29,7 +29,8 @@ public class ConfigLoader {
      */
     public static String getProperty(String key) {
         // Priority 1: Check System Environment (Render/Docker)
-        String envValue = System.getenv(key.replace(".", "_").toUpperCase());
+        // Convert "mail.smtp.connection-timeout" → "MAIL_SMTP_CONNECTION_TIMEOUT"
+        String envValue = System.getenv(key.replace(".", "_").replace("-", "_").toUpperCase());
 
         // I am giving priority to env variables
         if (envValue != null) return envValue;
